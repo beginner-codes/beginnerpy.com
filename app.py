@@ -16,7 +16,7 @@ from models import *
 
 app = Flask(__name__)
 # app.secret_key = token_urlsafe(32)
-app.secret_key = "78h899h=(H(uZGui334oh7zRD58RplL=g78z(%/R2=FHB"
+app.secret_key = os.environ.get("SECRET_KEY", "safe-for-committing")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 DEBUG = True
 
