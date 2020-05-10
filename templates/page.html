@@ -19,10 +19,17 @@
 				<a href="/tag/{{ tag.link }}"><span class="badge badge-pill article-pill">{{ tag.name }}</span></a>
 				{% endfor %}
 			</div>
-			<div class="author-card">
+			<div class="author-card mb-3">
 				<img class="avatar-small" src="/static/assets/userimg/{{ article.author.id }}.jpg">
-				<p class="ib"><span class="text-muted">By </span>{{ article.author.displayname }}, <small class="text-muted">{{ article.date_created.strftime('%d %B %Y, %H:%M') }}</small></p>
+				<p class="ib"> {{ article.author.displayname }}, <small class="text-muted">{{ article.date_created.strftime('%d %B %Y, %H:%M') }}</small></p>
 			</div>
+			{% if article.summary %}
+			<h2>The point</h2>
+			<div class="article-content">
+				{{ article.summary|safe }}
+			</div>
+			<h2>The details</h2>
+			{% endif %}
 			<div class="article-content">
 				{{ article.content|safe }}
 			</div>
