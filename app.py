@@ -1,14 +1,15 @@
-import datetime, os, re
+import datetime
+import os
+import re
 from secrets import token_urlsafe
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_wtf import Form, FlaskForm
-from flask_wtf.csrf import CSRFProtect, CSRFError
+from flask_wtf import FlaskForm
+from flask_wtf.csrf import CSRFProtect
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, Text, ForeignKey, Table, and_, or_, desc, update
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 
 from models import *
