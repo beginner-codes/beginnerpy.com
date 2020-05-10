@@ -658,7 +658,6 @@ def users():
 @app.route("/admin/build")
 def build_db():
     if not engine.table_names():
-        Session = sessionmaker(bind=engine)
         session = Session()
         build(engine, session)
     return redirect(url_for('admin'))
