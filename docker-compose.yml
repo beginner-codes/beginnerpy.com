@@ -1,0 +1,23 @@
+version: "3"
+services:
+  postgres_db:
+    image: "postgres:12.1"
+    container_name: "my_postgres"
+    environment:
+      - POSTGRES_USER=postgresadmin
+      - POSTGRES_PASSWORD=dev-env-password-safe-to-be-public
+      - POSTGRES_DB=beginnerpy
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  site:
+    depends_on:
+      - postgres_db
+    build: .
+    command: poetry run gunicorn -w 1 --bind=0.0.0.0:5000 app:app
+    env_file:
+      - site.config
+    ports:
+      - 5000:5000

@@ -130,57 +130,39 @@ class Article(Base):
 	tags = relationship('Tag', secondary='articleTags', backref='articles', lazy='joined')
 
 
+def build(engine, session):
+    Base.metadata.create_all(bind=engine)
 
-# UNCOMMENT CODE BELOW TO CREATE DATABASE TABLES AND UPLOAD INITIAL DATA
+    for category in categories:
+        item = Category(
+            name = category["name"],
+            link = category["link"],
+            formtitle = category["formtitle"],
+            buttonlabel = category["buttonlabel"],
+            active = category["active"]
+        )
+        session.add(item)
+        session.commit()
+        print("Category", category["name"])
 
+    for tag in tags:
+        item = Tag(
+            name = tag["name"],
+            title = tag["title"],
+            link = tag["link"]
+        )
+        session.add(item)
+        session.commit()
+        print("Tag", tag)
 
-# user = os.environ.get("DB_USER", "postgres")
-# host = os.environ.get("DB_HOST", "127.0.0.1")
-# port = os.environ.get("DB_PORT", "5432")
-# sslmode = "require" if os.environ.get("PRODUCTION", False) else None
-# password = os.environ.get("DB_PASSWORD", "P7COFca3DBgu3j")
+    for module in modules:
+        item = Module(
+            name = module["name"],
+            title = module["title"],
+            link = module["link"]
+        )
+        session.add(item)
+        session.commit()
+        print("Module", module)
 
-# engine = create_engine( 
-# 	f"postgresql://{user}:{password}@{host}:{port}/beginnerpy",
-# 	connect_args = {
-# 		"sslmode": sslmode
-# 	}
-# )
-# Base.metadata.create_all(bind=engine)
-# Session = sessionmaker(bind=engine)
-# session = Session()
-
-
-# for category in categories:
-# 	item = Category(
-# 		name = category["name"],
-# 		link = category["link"],
-# 		formtitle = category["formtitle"],
-# 		buttonlabel = category["buttonlabel"],
-# 		active = category["active"]
-# 	)
-# 	session.add(item)
-# 	session.commit()
-# 	print("Category", category["name"])
-
-# for tag in tags:
-# 	item = Tag(
-# 		name = tag["name"],
-# 		title = tag["title"],
-# 		link = tag["link"]
-# 	)
-# 	session.add(item)
-# 	session.commit()
-# 	print("Tag", tag)
-
-# for module in modules:
-# 	item = Module(
-# 		name = module["name"],
-# 		title = module["title"],
-# 		link = module["link"]
-# 	)
-# 	session.add(item)
-# 	session.commit()
-# 	print("Module", module)
-
-# session.close()
+    session.close()
