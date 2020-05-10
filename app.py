@@ -18,7 +18,7 @@ app = Flask(__name__)
 # app.secret_key = token_urlsafe(32)
 app.secret_key = os.environ.get("SECRET_KEY", "safe-for-committing")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-DEBUG = True
+DEBUG = os.environ.get("PRODUCTION", False) is not False
 
 Base = declarative_base()
 user = os.environ.get("DB_USER", "postgres")
