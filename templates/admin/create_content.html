@@ -87,8 +87,30 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#summary').summernote();
-		$('#content').summernote();
+		$('#summary').summernote({
+			toolbar: [
+				['style', ['style']],
+				['font', ['bold', 'underline', 'italic', 'clear']],
+				['fontname', ['fontname', 'fontsize']],
+				['color', ['color']],
+				['para', ['ul', 'ol', 'paragraph']],
+				['table', ['table']],
+				['insert', ['link', 'picture', 'video']],
+				['view', ['codeview', 'help']],
+			],
+		});
+		$('#content').summernote({
+			toolbar: [
+				['style', ['style']],
+				['font', ['bold', 'underline', 'italic', 'clear']],
+				['fontname', ['fontname', 'fontsize']],
+				['color', ['color']],
+				['para', ['ul', 'ol', 'paragraph']],
+				['table', ['table']],
+				['insert', ['link', 'picture', 'video']],
+				['view', ['codeview', 'help']],
+			]
+		});
 	});
 </script>
 {% endblock %}

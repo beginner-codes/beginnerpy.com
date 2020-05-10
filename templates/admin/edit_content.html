@@ -60,8 +60,30 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#content').summernote();
-		$('#summary').summernote();
+		$('#summary').summernote({
+			toolbar: [
+				['style', ['style']],
+				['font', ['bold', 'underline', 'italic', 'clear']],
+				['fontname', ['fontname', 'fontsize']],
+				['color', ['color']],
+				['para', ['ul', 'ol', 'paragraph']],
+				['table', ['table']],
+				['insert', ['link', 'picture', 'video']],
+				['view', ['codeview', 'help']],
+			],
+		});
+		$('#content').summernote({
+			toolbar: [
+				['style', ['style']],
+				['font', ['bold', 'underline', 'italic', 'clear']],
+				['fontname', ['fontname', 'fontsize']],
+				['color', ['color']],
+				['para', ['ul', 'ol', 'paragraph']],
+				['table', ['table']],
+				['insert', ['link', 'picture', 'video']],
+				['view', ['codeview', 'help']],
+			]
+		});
 	});
 </script>
 {% endblock %}

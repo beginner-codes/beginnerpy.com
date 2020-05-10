@@ -16,9 +16,9 @@ from models import *
 
 app = Flask(__name__)
 # app.secret_key = token_urlsafe(32)
-app.secret_key = "78h899h=(H(uZGui334oh7zRD58RplL=g78z(%/R2=FHB"
+app.secret_key = os.environ.get("SECRET_KEY", "safe-for-committing")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-DEBUG = True
+DEBUG = os.environ.get("PRODUCTION", False) is not False
 
 Base = declarative_base()
 user = os.environ.get("DB_USER", "postgres")
@@ -653,6 +653,14 @@ def users():
 		"property": "admin"
 	}
 	return render_template("admin/users.html", **context)
+
+
+@app.route("/admin/build")
+def build_db():
+    if not engine.table_names():
+        session = Session()
+        build(engine, session)
+    return redirect(url_for('admin'))
 
 
 
