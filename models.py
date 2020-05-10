@@ -124,6 +124,7 @@ class Article(Base):
 	category_id = Column(Integer, ForeignKey('category.id')) 
 	category = relationship("Category", backref="articles", lazy='joined')
 	date_created = Column(DateTime(), nullable=False, index=True)
+	last_modified = Column(DateTime(), index=True)
 	viewCount = Column(Integer, default=0, index=True)
 	usefulCount = Column(Integer, default=0, index=True)
 	notUsefulCount = Column(Integer, default=0)

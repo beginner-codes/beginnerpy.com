@@ -21,7 +21,7 @@
 			</div>
 			<div class="author-card">
 				<img class="avatar-small" src="/static/assets/userimg/{{ article.author.id }}.jpg">
-				<p class="ib"><span class="text-muted">By </span>{{ article.author.displayname }}, <small class="text-muted">{{ article.date_created }}</small></p>
+				<p class="ib"><span class="text-muted">By </span>{{ article.author.displayname }}, <small class="text-muted">{{ article.date_created.strftime('%d %B %Y, %H:%M') }}</small></p>
 			</div>
 			<div class="article-content">
 				{{ article.content|safe }}
