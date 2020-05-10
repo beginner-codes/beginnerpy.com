@@ -11,8 +11,8 @@ RUN poetry install
 
 USER 1000:1000
 
-COPY static .
-COPY templates .
+COPY static static
+COPY templates templates
 COPY models.py .
 COPY app.py .
 CMD ["poetry", "run", "gunicorn", "-w 4", "--bind=0.0.0.0:5000", "app:app"]
