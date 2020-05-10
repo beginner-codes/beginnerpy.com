@@ -18,7 +18,7 @@ app = Flask(__name__)
 # app.secret_key = token_urlsafe(32)
 app.secret_key = os.environ.get("SECRET_KEY", "safe-for-committing")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-DEBUG = os.environ.get("PRODUCTION", False) is not False
+DEBUG = os.environ.get("PRODUCTION", False) is False
 
 Base = declarative_base()
 user = os.environ.get("DB_USER", "postgres")
@@ -213,7 +213,6 @@ def category(category_link):
 # Displays an article to the user
 @app.route('/<category>/<link>')
 def page(category, link):
-	print("Category:", category, "Link:", link)
 	session = Session()
 	article = session.query(Article).filter_by(link=link).first()
 	article.viewCount = article.viewCount + 1
@@ -241,6 +240,21 @@ def page(category, link):
 					else:
 						x += "</code></pre>"
 		article.content = x
+		if article.summary:
+			x = article.summary
+			parts = re.split('<pre>|</pre>', x)
+			ispre = x.endswith("</pre>")
+			end = len(parts)
+			if end > 1:
+				x = ""
+				for i in range(0, end):
+					x += parts[i]
+					if i < end - 1:
+						if i % 2 == 0:
+							x += "<pre><code class='language-python'>"
+						else:
+							x += "</code></pre>"
+			article.summary = x
 	except ValueError:
 		pass
 	context = {
@@ -352,7 +366,6 @@ def create_category():
 @login_required
 def save_item():
 	item_type = request.form.get("type")
-	print(item_type)
 	item_name = request.form.get("name")
 	item_title = request.form.get("title")
 	item_link = request.form.get("link")
@@ -441,7 +454,6 @@ def save_category():
 	category = session.query(Category).filter_by(link=link).first()
 	# If the category exists, update it.
 	if category:
-		print("Category exists:", category.name)
 		category.name = title
 		category.link = link
 		category.buttonlabel = buttonlabel
@@ -452,7 +464,6 @@ def save_category():
 		flash(f"<strong>{title}</strong> category was successfully updated.", "success")
 	# If the category doesn't exist, create it.
 	else:
-		print("Category doesn't exist.")
 		category = Category(
 			name = title,
 			link = link,
@@ -472,7 +483,6 @@ def save_category():
 @app.route('/admin/delete_category/<cid>', methods=["POST", "GET"])
 @login_required
 def delete_category(cid):
-	print("Delete category function called.")
 	session = Session()
 	category = session.query(Category).filter_by(id=int(cid)).first()
 	if not category.articles:
