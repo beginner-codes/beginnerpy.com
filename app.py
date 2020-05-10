@@ -1,5 +1,4 @@
-import datetime, glob, os, json, requests, PIL.Image, re
-from PIL import ImageOps, ImageDraw
+import datetime, os, re
 from secrets import token_urlsafe
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -154,7 +153,8 @@ def index():
 def module(module_link):
 	session = Session()
 	module = session.query(Module).filter_by(link=module_link).first()
-	print(module.id, module.name, module.link)
+	module.clickCount = module.clickCount + 1
+	session.commit()
 	articles = session.query(Article).filter_by(draft=0).join(articleModules).filter(articleModules.c.module_id==module.id).order_by(Article.date_created)
 	session.close()
 	context = {
@@ -171,7 +171,8 @@ def module(module_link):
 def tag(tag_link):
 	session = Session()
 	tag = session.query(Tag).filter_by(link=tag_link).first()
-	print(tag.id, tag.name, tag.link)
+	tag.clickCount = tag.clickCount + 1
+	session.commit()
 	articles = session.query(Article).filter_by(draft=0).join(articleTags).filter(articleTags.c.tag_id==tag.id).order_by(Article.date_created)
 	session.close()
 	context = {
@@ -193,6 +194,9 @@ def category(category_link):
 	if cat['active'] == False:
 		return redirect(url_for('index'))
 	else:
+		category = session.query(Category).filter_by(id=int(cat["id"])).first()
+		category.viewCount = category.viewCount + 1
+		session.commit()
 		items = session.query(Article).filter_by(draft=0, category_id=int(cat["id"]))
 	session.close()
 	context = {
@@ -209,11 +213,17 @@ def category(category_link):
 @app.route('/<category>/<link>')
 def page(category, link):
 	print("Category:", category, "Link:", link)
+	session = Session()
+	article = session.query(Article).filter_by(link=link).first()
+	article.viewCount = article.viewCount + 1
+	session.commit()
+	session.close()
+
 	sidenav = getSideNav()
+
 	session = Session()
 	article = session.query(Article).filter_by(link=link).first()
 	session.close()
-	article.date_created = article.date_created.strftime('%d %B %Y, %H:%M')
 	# We have to insert a <code> tag into the page inside every <pre></pre> tag to make the code highlighting work
 	try:
 		x = article.content
@@ -286,9 +296,6 @@ def admin_category(category_link):
 		items = session.query(Article).filter_by(category_id=int(cid)).order_by(desc(Article.id))
 		draft = session.query(Article).filter_by(category_id=int(cid), draft=1).count()
 		live = session.query(Article).filter_by(category_id=int(cid), draft=0).count()
-	if cat['name'] not in ["Modules", "Tags"]:
-		for item in items:
-			item.date_created = item.date_created.strftime('%d %B %Y, %H:%M')
 	session.close()
 	context = {
 		"category": cat,
@@ -560,6 +567,7 @@ def save_article():
 		article.content = content
 		article.summary = summary
 		article.draft = draft
+		article.last_modified = datetime.now()
 
 		session.execute(articleTags.delete().where(articleTags.c.article_id==article.id))
 		session.execute(articleModules.delete().where(articleModules.c.article_id==article.id))
