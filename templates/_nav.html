@@ -1,0 +1,60 @@
+<nav class="nav-top d-none d-md-block d-lg-block d-xl-block">
+	{% if current_user.is_admin %}
+	<ul class="nav-list">
+		<li class="nav-item-top">
+			<a class="nav-link" href="{{ url_for('admin') }}"><i class="fas fa-tools"></i> Admin</a>
+		</li>
+		<li class="nav-item-top">
+			<a class="nav-link" href="{{ url_for('admin_categories') }}"><i class="fas fa-th-list"></i> Categories</a>
+		</li>
+		<li class="nav-item-top">
+			<a class="nav-link" href="{{ url_for('users') }}"><i class="fas fa-users"></i> Users</a>
+		</li>
+		<li class="nav-item-top">
+			<a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+		</li>
+	</ul>
+	{% else %}
+	<ul>
+		<li class="nav-item-top active">
+			<a class="nav-link" href="/login">Login</a>
+		</li>
+		<li class="nav-item-top">
+			<a class="nav-link" href="/register">Register</a>
+		</li>
+	</ul>
+	{% endif %}
+</nav>
+<nav class="nav-mobile d-none d-block d-sm-block d-md-none d-lg-none d-xl-none">
+	{% if current_user.is_admin %}
+	<ul class="nav-list">
+		<li class="nav-item-mobile">
+			<a id="sidenav-toggle" class="nav-link" href="#" onclick="toggle_sidebar()"><i class="fas fa-bars"></i></a>
+		</li>
+		<li class="nav-item-mobile">
+			<a class="nav-link" href="{{ url_for('admin') }}"><i class="fas fa-tools"></i></a>
+		</li>
+		<li class="nav-item-mobile">
+			<a class="nav-link" href="{{ url_for('admin_categories') }}"><i class="fas fa-th-list"></i></a>
+		</li>
+		<li class="nav-item-mobile">
+			<a class="nav-link" href="{{ url_for('users') }}"><i class="fas fa-users"></i></a>
+		</li>
+		<li class="nav-item-mobile">
+			<a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i></a>
+		</li>
+	</ul>
+	{% else %}
+	<ul class="nav-list">
+		<li class="nav-item-mobile">
+			<a id="sidenav-toggle" class="nav-link" href="#" onclick="toggle_sidebar()"><i class="fas fa-bars"></i></a>
+		</li>
+		<li class="nav-item-mobile">
+			<a class="nav-link" href="/login">Login</a>
+		</li>
+		<li class="nav-item-mobile">
+			<a class="nav-link" href="/register">Register</a>
+		</li>
+	</ul>
+	{% endif %}
+</nav>

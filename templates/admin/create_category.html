@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block title %}New Category | Admin | {{ super() }}{% endblock %}
+
+{% block admin_main %}
+<div class="container">
+	<form method="POST" action="{{ url_for('save_category') }}">
+		<input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+		<div class="row pt-4 pb-4">
+			<div class="col-6">
+				<h2>New Category</h2>
+			</div>
+			<div class="col-6 alignr custom-control custom-checkbox">
+				<button type="submit" class="btn btn-outline-primary" title="Save Category"><i class="fas fa-save"></i>&nbsp; SAVE</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<label for="title"><small>Title</small></label>
+				<input id="title" type="text" name="title" class="form-control mb-2">
+				<label for="link"><small>Link</small></label>
+				<input id="link" type="text" name="link" class="form-control mb-2">
+			</div>
+			<div class="col-6">
+				<label for="buttonlabel"><small>Button Label</small></label>
+				<input id="buttonlabel" type="text" name="buttonlabel" class="form-control mb-2">
+				<label for="formtitle"><small>Form Title</small></label>
+				<input id="formtitle" type="text" name="formtitle" class="form-control mb-2">
+			</div>
+			<div class="col-12">
+				<label for="description"><small>Description</small></label>
+				<textarea id="description" name="description"></textarea>
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock %}
+
+{% block scripts_bottom %}
+<script type="text/javascript" src="/static/js/admin.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#description').summernote();
+	});
+</script>
+{% endblock %}

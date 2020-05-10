@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+
+{% block title %}Categories | Admin | {{ super() }}{% endblock %}
+
+{% block admin_main %}
+<div class="container">
+	<div class="row pt-4 pb-4">
+		<div class="col-8">
+			<h2>Categories</h2>
+		</div>
+		<div class="col-4 alignr">
+			<a href="{{ url_for('create_category') }}" class="btn btn-outline-primary" title="New Category"><i class="fas fa-plus"></i>&nbsp; New Category</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			{% with messages = get_flashed_messages(with_categories=true) %}
+				{% if messages %}
+					{% for category, message in messages %}
+					<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+						{{ message|safe }}
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<table class="table table-sm table-striped table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Name</th>
+						<th scope="col">Link</th>
+						<th scope="col">Button Label</th>
+						<th scope="col">Form Title</th>
+						<th scope="col">Active</th>
+						<th scope="col">Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for category in categories %}
+					<tr class="table-row-clickable" onclick="window.location='../admin/editcategory/{{ category.link }}';" title="Edit category">
+						<th scope="row">{{ category.id }}</th>
+						<td scope="col">{{ category.name }}</td>
+						<td scope="col">{{ category.link }}</td>
+						<td scope="col">{{ category.buttonlabel }}</td>
+						<td scope="col">{{ category.formtitle }}</td>
+						<td scope="col" style="{% if category.active == True %}color: #00CC00;{% else %}color: #CC0000;{% endif %}">{{ category.active }}</td>
+						<td scope="col">{% if category.description %}Yes{% else %}No{% endif %}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}

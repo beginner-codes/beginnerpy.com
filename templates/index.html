@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<h1 class="pt-4 pb-4">{{ title }}</h1>
+<h2 class="pt-4 pb-4">Latest Content</h2>
+<div class="row">
+	{% for item in content %}
+	<div class="col-6">
+		<a class="list-btn" href="/{{ item.category.link }}/{{ item.link }}">
+			<div class="list-btn-title">{{ item.title }}</div>
+			<div class="badge list-btn-category">{{ item.category.name }}</div>
+		</a>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+
+{% block title %}Login | {{ super() }}{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-6">
+			<h1 class="">Login</h1>
+			{% with messages = get_flashed_messages(with_categories=true) %}
+				{% if messages %}
+					{% for category, message in messages %}
+						<div class="alert alert-{{ category }}">
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+			<form method="POST" action="" class="form">
+				{{ form.hidden_tag() }}
+
+				<fieldset class="form-group">
+					<div class="form-group">
+						{% if form.email.errors %}
+							{{ form.email(placeholder="email", class="form-control is-invalid") }}
+							<div class="invalid-feedback">
+								{% for error in form.email.errors %}
+									<span>{{ error }}</span>
+								{% endfor %}
+							</div>
+						{% else %}
+							{{ form.email(placeholder="email", class="form-control") }}
+						{% endif %}
+
+						{% if form.password.errors %}
+							{{ form.password(placeholder="password", class="form-control is-invalid") }}
+							<div class="invalid-feedback">
+								{% for error in form.password.errors %}
+									<span>{{ error }}</span>
+								{% endfor %}
+							</div>
+						{% else %}
+							{{ form.password(placeholder="password", class="form-control") }}
+						{% endif %}
+					</div>
+					<div class="form-group">
+						{{ form.submit(class="btn q11-transparent-button") }}
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

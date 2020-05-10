@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ sidenav[cat_id-1]['name'] }} | {{ super() }}{% endblock %}
+
+{% block main %}
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<h1 class="my-4">{{ sidenav[cat_id-1]['name'] }}</h1>
+			<h2 class="pt-4 pb-4">Latest Content</h2>
+		</div>
+		{% for article in articles %}
+		<div class="col-6">
+			<a class="list-btn" href="/{{ article.category.link }}/{{ article.link }}">
+				<div class="list-btn-title">{{ article.title }}</div>
+			</a>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ article.title }} | {{ super() }}{% endblock %}
+
+{% block scripts_top %}
+<link rel="stylesheet" type="text/css" href="/static/css/prism.css" >
+{% endblock %}
+
+{% block main %}
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<h1 class="mt-4 mb-4 ib">{{ article.title }}{% if current_user.is_admin %} <small class="text-muted smalltext"><small>&nbsp;&nbsp;<a class="edit-link" href="/admin/edit/{{ article.link }}" title="Edit article"><i class="far fa-edit"></i>&nbsp; Edit</a></small></small>{% endif %}</h1>
+			<div>
+				{% for module in article.modules %}
+				<a href="/module/{{ module.link }}"><span class="badge badge-pill article-pill">{{ module.name }}</span></a>
+				{% endfor %}
+				{% for tag in article.tags %}
+				<a href="/tag/{{ tag.link }}"><span class="badge badge-pill article-pill">{{ tag.name }}</span></a>
+				{% endfor %}
+			</div>
+			<div class="author-card">
+				<img class="avatar-small" src="/static/assets/userimg/{{ article.author.id }}.jpg">
+				<p class="ib"><span class="text-muted">By </span>{{ article.author.displayname }}, <small class="text-muted">{{ article.date_created }}</small></p>
+			</div>
+			<div class="article-content">
+				{{ article.content|safe }}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts_bottom %}
+<script type="text/javascript" src="/static/js/prism.min.js"></script>
+{% endblock %}

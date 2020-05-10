@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block title %}Users | Admin | {{ super() }}{% endblock %}
+
+{% block admin_main %}
+<div class="container">
+	<div class="row pt-4 pb-4">
+		<div class="col-12">
+			<h2>Users</h2>
+			<table class="table table-sm table-striped table-hover">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Avatar</th>
+						<th scope="col">Display Name</th>
+						<th scope="col">Discord ID</th>
+						<th scope="col">Email</th>
+						<th scope="col">Admin</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for user in users %}
+					<tr class="table-row-clickable">
+						<th scope="col"><span class="centerv">{{ user.id }}</span></th>
+						<th scope="col"><img class="avatar-medium centerv" src="/static/assets/userimg/{{ user.image_file }}"></th>
+						<td scope="col"><span class="centerv">{{ user.displayname }}</span></td>
+						<td scope="col"><span class="centerv">{{ user.discord_id }}</span></td>
+						<td scope="col"><span class="centerv">{{ user.email }}</span></td>
+						<td scope="col"><span class="centerv">{{ user.is_admin }}</span></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}

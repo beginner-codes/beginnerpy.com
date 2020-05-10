@@ -1,0 +1,94 @@
+{% extends 'layout.html' %}
+
+{% block title %}New Content | Admin | {{ super() }}{% endblock %}
+
+{% block admin_main %}
+{% if name in ["Modules", "Tags"] %}
+<div class="container">
+	<form method="POST" action="{{ url_for('save_item') }}">
+		<div class="row pt-4 pb-4">
+			<div class="col-6">
+				<h2>{{ category.formtitle }}</h2>
+			</div>
+			<div class="col-6 alignr custom-control custom-checkbox">
+				<button type="submit" class="btn btn-outline-primary" title="Save Item"><i class="fas fa-save"></i>&nbsp; SAVE</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+				<input id="type" type="hidden" name="type" value="{{ category.name }}" />
+				<label for="name"><small>Name</small></label>
+				<input id="name" type="text" name="name" class="form-control mb-2">
+				<label for="title"><small>Title</small></label>
+				<input id="title" type="text" name="title" class="form-control mb-2">
+				<label for="link"><small>Link</small></label>
+				<input id="link" type="text" name="link" class="form-control mb-2">
+			</div>
+		</div>
+	</form>
+</div>
+{% else %}
+<div class="container">
+	<form method="POST" action="{{ url_for('save_article') }}">
+		<div class="row pt-4 pb-4">
+			<div class="col-6">
+				<h2>{{ category.formtitle }}</h2>
+			</div>
+			<div class="col-6 alignr custom-control custom-checkbox">
+				<input type="checkbox" class="custom-control-input mt-2" id="draft" name="draft">
+				<label class="custom-control-label mt-2 mr-2" for="draft">Publish live</label>
+				<button type="submit" class="btn btn-outline-primary" title="Save Article"><i class="fas fa-save"></i>&nbsp; SAVE</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-10 mb-4">
+				<input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+				<input id="cat_id" type="hidden" name="cat_id" value="{{ category.id }}" />
+				<input id="cat_link" type="hidden" name="cat_link" value="{{ category.link }}" />
+				<input id="link" type="hidden" name="link" />
+				<label for="title"><small>Title</small></label>
+				<input id="title" type="text" name="title" class="form-control mb-2">
+				<label for="summary"><small>Summary</small></label>
+				<textarea id="summary" name="summary"></textarea>
+				<label class="mt-2" for="content"><small>Content</small></label>
+				<textarea id="content" name="content"></textarea>
+			</div>
+			<div class="col-2">
+				<label><small>Modules</small></label>
+				<div id="checkboxes_modules">
+					{% for module in modules %}
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input" id="module_{{ module.id }}" name="module_{{ module.id }}">
+						<label class="custom-control-label" for="module_{{ module.id }}">{{ module.name }}</label>
+					</div>
+					{% endfor %}
+				</div>
+				<hr>
+				<label><small>Tags</small></label>
+				<div id="checkboxes_tags">
+					{% for tag in tags %}
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input" id="tag_{{ tag.id }}" name="tag_{{ tag.id }}">
+						<label class="custom-control-label" for="tag_{{ tag.id }}">{{ tag.name }}</label>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts_bottom %}
+<script type="text/javascript" src="/static/js/admin.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#summary').summernote();
+		$('#content').summernote();
+	});
+</script>
+{% endblock %}

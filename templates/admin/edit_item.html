@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block title %}Edit Item | Admin | {{ super() }}{% endblock %}
+
+{% block admin_main %}
+<div class="container">
+	<form method="POST" action="{{ url_for('save_item') }}">
+		<div class="row pt-4 pb-4">
+			<div class="col-6">
+				<h2>Edit {{ item.title }} <small class="text-muted smalltext">&nbsp;&nbsp;<a class="delete-link" href="/admin/delete_item/{{ category }}/{{ item.id }}" title="Delete {{ item.title }}"><i class="far fa-trash-alt"></i>&nbsp; Delete</a></small></h2>
+			</div>
+			<div class="col-6 alignr custom-control custom-checkbox">
+				<button type="submit" class="btn btn-outline-primary" title="Save Item"><i class="fas fa-save"></i>&nbsp; SAVE</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+				<input id="category" type="hidden" name="category" value="{{ category }}" />
+				<label for="name"><small>Name</small></label>
+				<input id="name" type="text" name="name" class="form-control mb-2" value="{{ item.name }}">
+				<label for="title"><small>Title</small></label>
+				<input id="title" type="text" name="title" class="form-control mb-2" value="{{ item.title }}">
+				<label for="link"><small>Link</small></label>
+				<input id="link" type="text" name="link" class="form-control mb-2" value="{{ item.link }}">
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ category.name }} | Admin | {{ super() }}{% endblock %}
+
+{% block admin_main %}
+<div class="container">
+	<div class="row pt-4 pb-4">
+		<div class="col-10">
+			<h2>{{ category.name }} <small class="text-muted smalltext">{% if category.active %}Active{% else %}Inactive{% endif %} | <a href="/admin/toggle_active?active={{category.active}}&cat={{category.id}}">{% if category.active %}Deactivate{% else %}Activate{% endif %}</a></small></h2>
+		</div>
+		<div class="col-2 alignr">
+			<a href="{{ url_for('create_content', category_id=category.id) }}" class="btn btn-outline-primary" title="New Article"><i class="fas fa-plus"></i>&nbsp; New {{ category.buttonlabel }}</a>
+		</div>
+	</div>
+	{% if category.name not in ['Tags', 'Modules'] %}
+	<div class="row">
+		<div class="col-12 mb-2">
+			{{ live }} live | {{ draft }} drafts
+		</div>
+	</div>
+	{% endif %}
+	<div class="row">
+		<div class="col-12">
+			{% with messages = get_flashed_messages(with_categories=true) %}
+				{% if messages %}
+					{% for c, message in messages %}
+					<div class="alert alert-{{ c }} alert-dismissible fade show" role="alert">
+						{{ message|safe }}
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<table class="table table-sm table-striped table-hover">
+				{% if category.name in ["Modules", "Tags"] %}
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Name</th>
+						<th scope="col">Title</th>
+						<th scope="col">Link</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for article in articles %}
+					<tr class="table-row-clickable" onclick="window.location='../edititem/{{ category.link }}/{{ article.link }}';">
+						<th scope="row">{{ article.id }}</th>
+						<td scope="col">{{ article.name }}</td>
+						<td scope="col">{{ article.title }}</td>
+						<td scope="col">{{ article.link }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+				{% else%}
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Title</th>
+						<th scope="col">Author</th>
+						<th scope="col">Created</th>
+						<th scope="col">Last Modified</th>
+						<th scope="col">Last Modified By</th>
+						<th scope="col">Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for article in articles %}
+					<tr class="table-row-clickable" onclick="window.location='../edit/{{ article.link }}';">
+						<th scope="row">{{ article.id }}</th>
+						<td scope="col">{{ article.title }}</td>
+						<td scope="col">{{ article.author.displayname }}</td>
+						<td scope="col">{{ article.date_created }}</td>
+						<td scope="col">{{ article.last_modified }}</td>
+						<td scope="col">{{ article.last_modified_by }}</td>
+						<td scope="col">{% if article.draft == 1 %}Draft{% else %}Live{% endif %}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+				{% endif %}
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}
