@@ -29,7 +29,7 @@
 			</div>
 			<div class="col-12">
 				<label for="editor"><small>Content</small></label>
-				<textarea id="content" name="content">{{ category.description|safe }}</textarea>
+				<textarea id="description" name="description">{{ category.description|safe }}</textarea>
 			</div>
 		</div>
 	</form>
@@ -42,7 +42,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#content').summernote({
+		$('#description').summernote({
 			toolbar: [
 				['style', ['style']],
 				['font', ['bold', 'underline', 'italic', 'clear']],
