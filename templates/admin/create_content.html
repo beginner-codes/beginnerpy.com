@@ -3,7 +3,7 @@
 {% block title %}New Content | Admin | {{ super() }}{% endblock %}
 
 {% block admin_main %}
-{% if name in ["Modules", "Tags"] %}
+{% if category.name in ["Modules", "Tags"] %}
 <div class="container">
 	<form method="POST" action="{{ url_for('save_item') }}">
 		<div class="row pt-4 pb-4">

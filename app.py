@@ -361,7 +361,7 @@ def create_category():
 	return render_template("admin/create_category.html", **context)
 
 
-# Saves a new tag or a new module
+# Saves a new tag or module, or updates an existing one
 @app.route('/admin/save_item', methods=["POST"])
 @login_required
 def save_item():
@@ -369,18 +369,33 @@ def save_item():
 	item_name = request.form.get("name")
 	item_title = request.form.get("title")
 	item_link = request.form.get("link")
+	print(item_type, item_name, item_title, item_link)
 	session = Session()
-	if item_type == "Tags":
-		typelink = "tags"
-		item = Tag(name = item_name, title = item_title, link = item_link)
-	elif item_type == "Modules":
-		typelink = "modules"
-		item = Module(name = item_name, title = item_title, link = item_link)
-	session.add(item)
-	session.commit()
-	session.close()
-	flash(f"<strong>{item_name}</strong> {item_type[:-1].lower()} has been successfully added.", "success")
-	return redirect(url_for('admin_category', category_link=typelink))
+	if item_type.lower() == "tags":
+		tag = session.query(Tag).filter_by(link=item_link).first()
+		if tag:
+			print("Element exists.")
+			tag.name = item_name
+			tag.title = item_title
+		else:
+			item = Tag(name = item_name, title = item_title, link = item_link)
+			session.add(item)
+		session.commit()
+		session.close()
+		flash(f"<strong>{item_title}</strong> {item_type[:-1].lower()} has been successfully updated.", "success")
+	elif item_type.lower() == "modules":
+		module = session.query(Module).filter_by(link=item_link).first()
+		if module:
+			print("Element exists.")
+			module.name = item_name
+			module.title = item_title
+		else:
+			item = Module(name = item_name, title = item_title, link = item_link)
+			session.add(item)
+		session.commit()
+		session.close()
+		flash(f"<strong>{item_title}</strong> {item_type[:-1].lower()} has been successfully added.", "success")
+	return redirect(url_for('admin_category', category_link=item_type.lower()))
 
 
 # Loads an existing article for editing

@@ -16,7 +16,7 @@
 		<div class="row">
 			<div class="col-12">
 				<input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-				<input id="category" type="hidden" name="category" value="{{ category }}" />
+				<input id="type" type="hidden" name="type" value="{{ category }}" />
 				<label for="name"><small>Name</small></label>
 				<input id="name" type="text" name="name" class="form-control mb-2" value="{{ item.name }}">
 				<label for="title"><small>Title</small></label>
