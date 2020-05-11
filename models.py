@@ -164,5 +164,3 @@ def build(engine, session):
         session.add(item)
         session.commit()
         print("Module", module)
-
-    session.close()

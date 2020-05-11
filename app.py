@@ -194,6 +194,7 @@ def category(category_link):
 	cat = [item for item in sidenav if item['link'] == category_link][0]
 	session = Session()
 	if cat['active'] == False:
+		session.close()
 		return redirect(url_for('index'))
 	else:
 		category = session.query(Category).filter_by(id=int(cat["id"])).first()
@@ -351,9 +352,7 @@ def create_content(category_id):
 @app.route('/admin/createcategory', methods=["POST", "GET"])
 @login_required
 def create_category():
-	session = Session()
 	sidenav = getSideNav()
-	session.close()
 	context = {
 		"sidenav": sidenav,
 		"endpoint": "createcategory",
@@ -524,7 +523,8 @@ def delete_article(category_link, article_id):
 		session.commit()
 		session.delete(article)
 		session.commit()
-		session.close()
+
+	session.close()
 
 	return redirect(url_for('admin_category', category_link=category_link))
 
@@ -544,10 +544,10 @@ def delete_item(category_link, item_id):
 		session.commit()
 		session.delete(item)
 		session.commit()
-		session.close()
 		flash(f"<strong>{item.name}</strong> has been removed from {category_link}.", "success")
 	else:
 		flash(f"An item with the id <strong>{item_id}</strong> in <strong>{category_link}</strong> wasn't found in the database.", "danger")
+	session.close()
 
 	return redirect(url_for('admin_category', category_link=category_link))
 
@@ -605,8 +605,6 @@ def save_article():
 		for item in modules:
 			session.execute(articleModules.insert().values(article_id=article.id, module_id=item))
 
-		session.commit()
-		session.close()
 		flash(f"The article <strong>{title}</strong> was successfully updated.", "success")
 	else:
 		link = title.replace(" ", "-").lower() + "-" + token_urlsafe(5)
@@ -628,9 +626,10 @@ def save_article():
 			session.execute(articleTags.insert().values(article_id=article.id, tag_id=item))
 		for item in modules:
 			session.execute(articleModules.insert().values(article_id=article.id, module_id=item))
-		session.commit()
-		session.close()
+
 		flash(f"The article <strong>{title}</strong> was successfully created.", "success")
+	session.commit()
+	session.close()
 	return redirect( url_for('admin_category', category_link=cat_link) )
 
 
@@ -687,6 +686,7 @@ def build_db():
     if not tables.issubset(engine.table_names()):
         session = Session()
         build(engine, session)
+        session.close()
     return redirect(url_for('admin'))
 
 
