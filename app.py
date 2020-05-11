@@ -683,7 +683,8 @@ def users():
 
 @app.route("/admin/build")
 def build_db():
-    if not engine.table_names():
+    tables = {'useraccount', 'article', 'category', 'articleTags', 'module', 'tag', 'articleModules'}
+    if not tables.issubset(engine.table_names()):
         session = Session()
         build(engine, session)
     return redirect(url_for('admin'))
