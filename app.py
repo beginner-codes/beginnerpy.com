@@ -21,6 +21,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 DEBUG = os.environ.get("PRODUCTION", False) is False
 
 Base = declarative_base()
+dbname = os.environ.get("DB_NAME", "beginnerpy")
 user = os.environ.get("DB_USER", "postgres")
 host = os.environ.get("DB_HOST", "127.0.0.1")
 port = os.environ.get("DB_PORT", "5432")
@@ -28,7 +29,7 @@ sslmode = "require" if os.environ.get("PRODUCTION", False) else None
 password = os.environ.get("DB_PASSWORD", "P7COFca3DBgu3j")
 
 engine = create_engine( 
-	f"postgresql://{user}:{password}@{host}:{port}/beginnerpy",
+	f"postgresql://{user}:{password}@{host}:{port}/{dbname}",
 	connect_args = {
 		"sslmode": sslmode
 	}
