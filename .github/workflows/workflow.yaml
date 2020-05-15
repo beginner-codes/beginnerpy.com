@@ -14,7 +14,7 @@ jobs:
       uses: actions/checkout@master
 
     - name: Update SHA
-      run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/site/_meta
+      run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
 
     - name: Build container image
       run: docker build -t zzmmrmn/beginnerpy-site:$(echo $GITHUB_SHA | head -c7) .
