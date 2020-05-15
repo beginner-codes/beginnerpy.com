@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: frontend
+    labels:
+        app: beginnerpy
+spec:
+    strategy:
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 2
+            maxUnavailable: 50%
+    selector:
+        matchLabels:
+            app: beginnerpy
+            tier: frontend
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                app: beginnerpy
+                tier: frontend
+        spec:
+            containers:
+              - name: flask-site
+                image: zzmmrmn/beginnerpy-site:<IMAGE_VERSION>
+                env:
+                  - name: PRODUCTION
+                    value: "PRODUCTION"
+                  - name: "DB_HOST"
+                    value: "private-personal-postgres-cluster-1-apr-26-backup-do-user-87772.a.db.ondigitalocean.com"
+                  - name: "DB_PORT"
+                    value: "25061"
+                  - name: "DB_NAME"
+                    value: "bpydb-pool"
+                  - name: "DB_USER"
+                    value: "beginnerpy"
+                  - name: "DB_PASSWORD"
+                    valueFrom:
+                        secretKeyRef:
+                            name: postgres-password
+                            key: password
+                ports:
+                  - containerPort: 5000
+                resources:
+                    requests:
+                        cpu: 100m
