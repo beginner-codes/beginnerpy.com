@@ -314,6 +314,15 @@ a:hover {
 	display: none;
 }
 
+pre.noformat {
+	background-color: #DDD;
+	border-radius: 5px;
+	font-size: .8em;
+	color: #666;
+	padding: 5px;
+	margin: 0;
+}
+
 
 @media only screen and (max-width: 768px) {
 	.container {
