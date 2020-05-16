@@ -4,3 +4,4 @@ __pycache__
 
 /postgres-data
 deployment/secret*
+_meta
