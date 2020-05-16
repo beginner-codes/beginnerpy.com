@@ -15,7 +15,7 @@ from sqlalchemy.orm import sessionmaker
 from models import *
 
 app = Flask(__name__)
-# app.secret_key = token_urlsafe(32)
+
 app.secret_key = os.environ.get("SECRET_KEY", "safe-for-committing")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 DEBUG = os.environ.get("PRODUCTION", False) is False
@@ -66,9 +66,9 @@ class RegistrationForm(FlaskForm):
 	def validate_email(self, email):
 		session = Session()
 		user = session.query(Useraccount).filter_by(email=email.data).first()
+		session.close()
 		if user:
 			raise ValidationError('That email is taken. Please choose a different one.')
-		session.close()
 
 
 class LoginForm(FlaskForm):
@@ -80,30 +80,30 @@ class LoginForm(FlaskForm):
 	submit = SubmitField('Login')
 
 
-@app.route('/register', methods=['POST', 'GET'])
-def register():
-	session = Session()
-	form = RegistrationForm()
-	if form.validate_on_submit():
-		hashed_pw = generate_password_hash(form.password.data).decode("utf-8")
-		user = Useraccount(
-			email=form.email.data,
-			password=hashed_pw,
-			displayname=form.displayname.data
-		)
-		session.add(user)
-		session.commit()
-		flash(f"Your registration for {form.email.data} was successful!", "success")
-		session.close()
-		return redirect(url_for("login"))
-	session.close()
-	context = {
-		"form": form,
-		"sidenav": getSideNav(),
-		"property": "front",
-		"endpoint": "register"
-	}
-	return render_template("register.html", **context)
+# @app.route('/register', methods=['POST', 'GET'])
+# def register():
+# 	session = Session()
+# 	form = RegistrationForm()
+# 	if form.validate_on_submit():
+# 		hashed_pw = generate_password_hash(form.password.data).decode("utf-8")
+# 		user = Useraccount(
+# 			email=form.email.data,
+# 			password=hashed_pw,
+# 			displayname=form.displayname.data
+# 		)
+# 		session.add(user)
+# 		session.commit()
+# 		flash(f"Your registration for {form.email.data} was successful!", "success")
+# 		session.close()
+# 		return redirect(url_for("login"))
+# 	session.close()
+# 	context = {
+# 		"form": form,
+# 		"sidenav": getSideNav(),
+# 		"property": "front",
+# 		"endpoint": "register"
+# 	}
+# 	return render_template("register.html", **context)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -559,7 +559,15 @@ def save_article():
 	title = request.form.get("title")
 	link = request.form.get("link")
 	content = request.form.get("content")
+	# Remove unwanted font-size setting
+	content = content.replace(' style="font-size: 1rem;"', '') # remove if it's the only style setting
+	content = content.replace('font-size: 1rem; ', '') # remove if there are other style settings too
 	summary = request.form.get("summary")
+	# Remove unwanted font-size setting
+	summary = summary.replace(' style="font-size: 1rem;"', '') # remove if it's the only style setting
+	summary = summary.replace('font-size: 1rem; ', '') # remove if there are other style settings too
+	if summary == "<p><br></p>":
+		summary = ""
 	modules = []
 	tags = []
 	session = Session()
