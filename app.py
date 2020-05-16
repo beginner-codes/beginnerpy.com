@@ -558,8 +558,6 @@ def delete_item(category_link, item_id):
 def save_article():
 	title = request.form.get("title")
 	link = request.form.get("link")
-	if "()" in link:
-		link = link.replace("()", "")
 	content = request.form.get("content")
 	# Remove unwanted font-size setting
 	content = content.replace(' style="font-size: 1rem;"', '') # remove if it's the only style setting
@@ -617,7 +615,7 @@ def save_article():
 
 		flash(f"The article <strong>{title}</strong> was successfully updated.", "success")
 	else:
-		link = title.replace(" ", "-").lower() + "-" + token_urlsafe(5)
+		link = title.replace(" ", "-").lower().replace("()", "").lower() + "-" + token_urlsafe(5)
 		article = Article(
 			title = title,
 			author_id = current_user.id,
