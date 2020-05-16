@@ -39,7 +39,7 @@ jobs:
       run: doctl kubernetes cluster kubeconfig save personal-kubernetes
 
     - name: Deploy to DigitalOcean Kubernetes
-      run: kubectl apply -f $GITHUB_WORKSPACE/deployment/deployment.yml
+      run: kubectl apply -f $GITHUB_WORKSPACE/deployment/deployment.yml -n bpy
 
     - name: Verify deployment
-      run: kubectl rollout status deployment/frontend
+      run: kubectl rollout status deployment/frontend -n bpy
