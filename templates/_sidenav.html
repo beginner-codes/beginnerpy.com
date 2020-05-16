@@ -12,11 +12,11 @@
 	{% if current_user.is_admin and property == "admin" %}
 		{% for category in sidenav %}
 			<li class="nav-item">
-				<a class="nav-link" href="/admin/category/{{ category.link }}">{{ category.name }}</a>
+				<a class="nav-link {% if category.active == False %}red{% endif %}" href="/admin/category/{{ category.link }}">{{ category.name }}</a>
 			</li>
 		{% endfor %}
 		<li class="nav-item dropright">
-			<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Discord Bot</a>
+			<a class="nav-link dropdown-toggle red" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Discord Bot</a>
 			<div class="dropdown-menu">
 				<a class="dropdown-item" href="#">Rules</a>
 				<a class="dropdown-item" href="#">User Scores</a>
