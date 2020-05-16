@@ -228,35 +228,12 @@ def page(category, link):
 	session.close()
 	# We have to insert a <code> tag into the page inside every <pre></pre> tag to make the code highlighting work
 	try:
-		x = article.content
-		parts = re.split('<pre>|</pre>', x)
-		ispre = x.endswith("</pre>")
-		end = len(parts)
-		if end > 1:
-			x = ""
-			for i in range(0, end):
-				x += parts[i]
-				if i < end - 1:
-					if i % 2 == 0:
-						x += "<pre><code class='language-python'>"
-					else:
-						x += "</code></pre>"
-		article.content = x
-		if article.summary:
-			x = article.summary
-			parts = re.split('<pre>|</pre>', x)
-			ispre = x.endswith("</pre>")
-			end = len(parts)
-			if end > 1:
-				x = ""
-				for i in range(0, end):
-					x += parts[i]
-					if i < end - 1:
-						if i % 2 == 0:
-							x += "<pre><code class='language-python'>"
-						else:
-							x += "</code></pre>"
-			article.summary = x
+		article.content = article.content.replace("<pre>", "<pre><code class='language-python'>")
+		article.content = article.content.replace("<pre class='noformat'>", "<pre class='noformat'><code>")
+		article.content = article.content.replace("</pre>", "</code></pre>")
+		article.summary = article.summary.replace("<pre>", "<pre><code class='language-python'>")
+		article.summary = article.summary.replace("<pre class='noformat'>", "<pre class='noformat'><code>")
+		article.summary = article.summary.replace("</pre>", "</code></pre>")
 	except ValueError:
 		pass
 	context = {
