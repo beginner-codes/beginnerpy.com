@@ -24,7 +24,7 @@ spec:
         spec:
             containers:
               - name: flask-site
-                image: zzmmrmn/beginnerpy-site:<IMAGE_VERSION>
+                image: ditumen/beginnerpy-site:<IMAGE_VERSION>
                 env:
                   - name: PRODUCTION
                     value: "PRODUCTION"
