@@ -3,8 +3,10 @@
 {% block title %}Edit Content | Admin | {{ super() }}{% endblock %}
 
 {% block admin_main %}
-<div class="container">
-	<form method="POST" action="{{ url_for('save_article') }}">
+<div id="toolbar1" class="toolbar-container"></div>
+<div id="toolbar2" class="toolbar-container hide"></div>
+<div class="container" onload="editMode()">
+	<form id="article_form" method="POST" action="{{ url_for('save_article') }}">
 		<div class="row pt-4 pb-4">
 			<div class="col-6">
 				<h2 class="ib">Edit Content <small class="text-muted smalltext">&nbsp;&nbsp;<a class="delete-link" href="/admin/delete_article/{{ article.category.link }}/{{ article.id }}" title="Delete this article"><i class="far fa-trash-alt"></i>&nbsp; Delete</a></small></h2>
@@ -12,7 +14,7 @@
 			<div class="col-6 alignr custom-control custom-checkbox">
 				<input type="checkbox" class="custom-control-input mt-2" id="draft" name="draft" {% if article.draft == 0 %}checked{% endif %}>
 				<label class="custom-control-label mt-2 mr-2" for="draft">Publish live</label>
-				<button type="submit" class="btn btn-outline-primary" title="Save Article"><i class="fas fa-save"></i>&nbsp; UPDATE</button>
+				<button class="btn btn-outline-primary" title="Save Article" onclick="submitForm()"><i class="fas fa-save"></i>&nbsp; UPDATE</button>
 			</div>
 		</div>
 		<div class="row">
@@ -23,10 +25,12 @@
 				<input id="link" type="hidden" name="link" value="{{ article.link }}" />
 				<label for="title"><small>Title</small></label>
 				<input id="title" type="text" name="title" class="form-control mb-2" value="{{ article.title }}">
-				<label for="summary"><small>Summary</small></label>
-				<textarea id="summary" name="summary">{{ article.summary }}</textarea>
-				<label class="mt-2" for="content"><small>Content</small></label>
-				<textarea id="content" name="content">{{ article.content }}</textarea>
+				<input id="summary" type="hidden" name="summary" />
+				<label for="summary_field"><small>Summary</small></label>
+				<div contenteditable="true" class="richtext-small form-control" id="summary_field" name="summary_field" onkeyup="trackEditor(this)" onmouseup="trackEditor(this)">{{ article.summary|safe }}</div>
+				<input id="content" type="hidden" name="content" />
+				<label for="content_field" class="mt-2"><small>Content</small></label>
+				<div contenteditable="true" class="richtext form-control" id="content_field" name="content_field" onkeyup="trackEditor(this)" onmouseup="trackEditor(this)">{{ article.content|safe }}</div>
 			</div>
 			<div class="col-2">
 				<label><small>Modules</small></label>
@@ -55,35 +59,6 @@
 {% endblock %}
 
 {% block scripts_bottom %}
-<script type="text/javascript" src="/static/js/admin.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#summary').summernote({
-			toolbar: [
-				['style', ['style']],
-				['font', ['bold', 'underline', 'italic', 'clear']],
-				['fontname', ['fontname', 'fontsize']],
-				['color', ['color']],
-				['para', ['ul', 'ol', 'paragraph']],
-				['table', ['table']],
-				['insert', ['link', 'picture', 'video']],
-				['view', ['codeview', 'help']],
-			],
-		});
-		$('#content').summernote({
-			toolbar: [
-				['style', ['style']],
-				['font', ['bold', 'underline', 'italic', 'clear']],
-				['fontname', ['fontname', 'fontsize']],
-				['color', ['color']],
-				['para', ['ul', 'ol', 'paragraph']],
-				['table', ['table']],
-				['insert', ['link', 'picture', 'video']],
-				['view', ['codeview', 'help']],
-			]
-		});
-	});
-</script>
+<script type="text/javascript" src="/static/ckeditor5/build/ckeditor.js"></script>
+<script type="text/javascript" src="/static/js/richtext.js"></script>
 {% endblock %}

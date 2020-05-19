@@ -1,0 +1,61 @@
+<div id="toolbar">
+	<select class="toolbar-btn" title="Font Style" onclick="execCmdWithArg('formatBlock', this.value)">
+		<option value="p" selected>Normal</option>
+		<option value="H3">H3</option>
+		<option value="H4">H4</option>
+		<option value="H5">H5</option>
+		<option value="H6">H6</option>
+		<option value="small">Small</option>
+		<option value="blockquote">Quote</option>
+		<option disabled>--------------------</option>
+		<option value="monospaced">Monospace</option>
+		<option value="pre">Python Code</option>
+		<option value="pre">HTML Code</option>
+		<option value="pre">CSS Code</option>
+		<option value="pre">JavaScript Code</option>
+		<option value="pre">Unformatted Code</option>
+		<option disabled>--------------------</option>
+		<option>Alert - danger</option>
+		<option>Alert - success</option>
+		<option>Alert - warning</option>
+		<option>Alert - info</option>
+	</select>
+	<div class="vr"></div>
+	<button class="toolbar-btn" title="Bold" onclick="execCmd('bold')"><i class="fas fa-bold"></i></button>
+	<button class="toolbar-btn" title="Italic" onclick="execCmd('italic')"><i class="fas fa-italic"></i></button>
+	<button class="toolbar-btn" title="Underline" onclick="execCmd('underline')"><i class="fas fa-underline"></i></button>
+	<div class="vr"></div>
+	<button class="toolbar-btn" title="Subscript" onclick="execCmd('subscript')"><i class="fas fa-subscript"></i></button>
+	<button class="toolbar-btn" title="Superscript" onclick="execCmd('superscript')"><i class="fas fa-superscript"></i></button>
+	<div class="vr"></div>
+	<button class="toolbar-btn" title="Unordered List" onclick="execCmd('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
+	<button class="toolbar-btn" title="Ordered List" onclick="execCmd('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
+	<div class="toolbar-btn">
+		<button class="toolbar-btn" title="Table" id="tableDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<i class="fas fa-table"></i>
+		</button>
+		<div class="dropdown-menu" aria-labelledby="tableDropdown">
+			<form class="toolbarDropdownForm">
+				<div class="form-group row">
+					<label for="tableColumns" class="col-sm-6">Columns</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control form-control-sm" id="tableColumns" value="1">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="tableRows" class="col-sm-6">Rows</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control form-control-sm" id="tableRows" value="1">
+					</div>
+				</div>
+				<button class="btn btn-primary btn-block btn-sm" type="submit" onclick="insertTable()">Insert</button>
+			</form>
+		</div>
+	</div>
+	<div class="vr"></div>
+	<button class="toolbar-btn" title="Image" onclick="execCmd('insertImage')"><i class="far fa-image"></i></button>
+	<button class="toolbar-btn" title="Link" onclick="execCmd('createLink')"><i class="fas fa-link"></i></button>
+	<button class="toolbar-btn" title="Remove Link" onclick="execCmd('unlink')"><i class="fas fa-unlink"></i></button>
+	<div class="vr"></div>
+	<button class="toolbar-btn" title="Code View" onclick="toggleSource()"><i class="fas fa-code"></i></button>
+</div>

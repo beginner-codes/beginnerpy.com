@@ -226,16 +226,13 @@ def page(category, link):
 	session = Session()
 	article = session.query(Article).filter_by(link=link).first()
 	session.close()
-	# We have to insert a <code> tag into the page inside every <pre></pre> tag to make the code highlighting work
-	try:
-		article.content = article.content.replace("<pre>", "<pre><code class='language-python'>")
-		article.content = article.content.replace("<pre class='noformat'>", "<pre class='noformat'><code>")
-		article.content = article.content.replace("</pre>", "</code></pre>")
-		article.summary = article.summary.replace("<pre>", "<pre><code class='language-python'>")
-		article.summary = article.summary.replace("<pre class='noformat'>", "<pre class='noformat'><code>")
-		article.summary = article.summary.replace("</pre>", "</code></pre>")
-	except ValueError:
-		pass
+	
+	# Some unnecessary elements the editor places into the html structure needfixing
+	article.content = article.content.replace(' contenteditable="true"', '')
+	article.content = article.content.replace('ck ck-widget__selection-handle', 'hide')
+	article.summary = article.summary.replace(' contenteditable="true"', '')
+	article.summary = article.summary.replace('ck ck-widget__selection-handle', 'hide')
+
 	context = {
 		"sidenav": sidenav,
 		"article": article,
@@ -536,15 +533,7 @@ def save_article():
 	title = request.form.get("title")
 	link = request.form.get("link")
 	content = request.form.get("content")
-	# Remove unwanted font-size setting
-	content = content.replace(' style="font-size: 1rem;"', '') # remove if it's the only style setting
-	content = content.replace('font-size: 1rem; ', '') # remove if there are other style settings too
 	summary = request.form.get("summary")
-	# Remove unwanted font-size setting
-	summary = summary.replace(' style="font-size: 1rem;"', '') # remove if it's the only style setting
-	summary = summary.replace('font-size: 1rem; ', '') # remove if there are other style settings too
-	if summary == "<p><br></p>":
-		summary = ""
 	modules = []
 	tags = []
 	session = Session()
