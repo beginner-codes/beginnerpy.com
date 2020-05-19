@@ -49,7 +49,7 @@ a:hover {
 	font-size: 1.1em;
 }
 .article-content code, .article-content pre {
-	font-size: .9em;
+	font-size: .88em;
 	border-radius: 5px;
 }
 .navbar-light {
@@ -313,6 +313,61 @@ a:hover {
 .hide {
 	display: none;
 }
+
+.toolbar-container {
+	padding: 10px;
+	position: fixed;
+	left: calc(50% - 495px);
+	top: 20px;
+	background-color: rgba(250,250,250,.8);
+	border-radius: 5px;
+	box-shadow: 0 10px 10px #BBB;
+	z-index: 9999;
+}
+.ck.ck-btn.ck-off, .ck.ck-dropdown {
+	display: inline-block;
+	vertical-align: top;
+	color: #FFF;
+	padding: 0;
+	margin: 0;
+	border-radius: 5px;
+	min-width: 40px;
+	height: 40px;
+	border: none;
+	background-color: unset;
+}
+.toolbar-btn:hover {
+	color: #FFE873;
+	background-color: #222;
+}
+.vr {
+	padding: 0;
+	margin: 0 5px;
+	display: inline-block;
+	background-color: #555;
+	width: 1px;
+	height: 40px;
+}
+.richtext-small {
+	min-height: 50vh;
+	width: 100%;
+	overflow-y: scroll;
+}
+.richtext {
+	min-height: 100vh;
+	width: 100%;
+	overflow-y: scroll;
+}
+.toolbarDropdownForm {
+	padding: 5px 10px;
+	width: 200px;
+}
+
+.title-clear {
+	clear: both;
+}
+
+
 
 pre.noformat {
 	background-color: #DDD;

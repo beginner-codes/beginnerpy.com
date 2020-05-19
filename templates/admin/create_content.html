@@ -29,6 +29,8 @@
 	</form>
 </div>
 {% else %}
+<div id="toolbar1" class="toolbar-container"></div>
+<div id="toolbar2" class="toolbar-container hide"></div>
 <div class="container">
 	<form method="POST" action="{{ url_for('save_article') }}">
 		<div class="row pt-4 pb-4">
@@ -49,10 +51,12 @@
 				<input id="link" type="hidden" name="link" />
 				<label for="title"><small>Title</small></label>
 				<input id="title" type="text" name="title" class="form-control mb-2">
-				<label for="summary"><small>Summary</small></label>
-				<textarea id="summary" name="summary"></textarea>
-				<label class="mt-2" for="content"><small>Content</small></label>
-				<textarea id="content" name="content"></textarea>
+				<input id="summary" type="hidden" name="summary" />
+				<label for="summary_field"><small>Summary</small></label>
+				<div contenteditable="true" class="richtext-small form-control" id="summary_field" name="summary_field" onkeyup="trackEditor(this)" onmouseup="trackEditor(this)"></div>
+				<input id="content" type="hidden" name="content" />
+				<label for="content_field" class="mt-2"><small>Content</small></label>
+				<div contenteditable="true" class="richtext form-control" id="content_field" name="content_field" onkeyup="trackEditor(this)" onmouseup="trackEditor(this)"></div>
 			</div>
 			<div class="col-2">
 				<label><small>Modules</small></label>
@@ -82,35 +86,6 @@
 {% endblock %}
 
 {% block scripts_bottom %}
-<script type="text/javascript" src="/static/js/admin.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#summary').summernote({
-			toolbar: [
-				['style', ['style']],
-				['font', ['bold', 'underline', 'italic', 'clear']],
-				['fontname', ['fontname', 'fontsize']],
-				['color', ['color']],
-				['para', ['ul', 'ol', 'paragraph']],
-				['table', ['table']],
-				['insert', ['link', 'picture', 'video']],
-				['view', ['codeview', 'help']],
-			],
-		});
-		$('#content').summernote({
-			toolbar: [
-				['style', ['style']],
-				['font', ['bold', 'underline', 'italic', 'clear']],
-				['fontname', ['fontname', 'fontsize']],
-				['color', ['color']],
-				['para', ['ul', 'ol', 'paragraph']],
-				['table', ['table']],
-				['insert', ['link', 'picture', 'video']],
-				['view', ['codeview', 'help']],
-			]
-		});
-	});
-</script>
+<script type="text/javascript" src="/static/ckeditor5/build/ckeditor.js"></script>
+<script type="text/javascript" src="/static/js/richtext.js"></script>
 {% endblock %}
