@@ -411,4 +411,7 @@ pre[data-language="Plain text"] code {
 	.nav-item-mobile .sidenav-toggle {
 		max-width: 50px;
 	}
+	.mobile-hidden {
+		display: none;
+	}
 }

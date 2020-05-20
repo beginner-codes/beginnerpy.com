@@ -1,14 +1,14 @@
-var hamburger = document.getElementById("sidebar-nav");
+var sidebar = document.getElementById("sidebar-nav");
 
 $(window).resize(function () {
 	let viewportWidth = $(window).width();
 	if (viewportWidth > 768) {
-		$("#sidebar-nav").removeClass('hide');
+		$("#sidebar-nav").css("display", "");
 	} else {
-		$("#sidebar-nav").addClass('hide');
+		$("#sidebar-nav").css("display", "none");
 	}
 });
 
 function toggle_sidebar() {
-	hamburger.classList.toggle("hide");
+	sidebar.classList.toggle("mobile-hidden");
 }
