@@ -275,6 +275,23 @@ def admin():
 	return render_template("admin/admin.html", **context)
 
 
+@app.route("/admin/db/<id>")
+@login_required
+def admin_db(id):
+	sidenav = getSideNav()
+	session = Session()
+	item = session.query(Article).filter_by(id=int(id)).first()
+	print(item.title, item.content, item.summary)
+	session.close()
+	context = {
+		"sidenav": sidenav,
+		"article": item,
+		"endpoint": "db",
+		"property": "admin"
+	}
+	return render_template("admin/db.html", **context)
+
+
 # Lists out the categories
 @app.route('/admin/categories')
 @login_required
