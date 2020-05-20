@@ -234,8 +234,6 @@ def page(category, link):
 	article.summary = article.summary.replace('ck ck-widget__selection-handle', 'hide')
 
 	# Fix removed <br> tags in code blocks by replacing them with \n
-
-	# Split text by <pre and </pre> tags
 	article.summary = replaceBr(article.summary)
 	article.content = replaceBr(article.content)
 
