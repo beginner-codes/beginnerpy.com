@@ -368,14 +368,15 @@ a:hover {
 }
 
 
-
-pre.noformat {
+pre[data-language="Plain text"] {
 	background-color: #DDD;
 	border-radius: 5px;
-	font-size: .8em;
-	color: #666;
+	border: none;
 	padding: 1em;
 	margin: .5em 0;
+}
+pre[data-language="Plain text"] code {
+	color: #666;
 }
 
 

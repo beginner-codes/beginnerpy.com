@@ -275,7 +275,6 @@ pre {
     padding: 1em;
     color: #353535;
     background: hsla(0, 0%, 78%, 0.3);
-    border: 1px solid hsl(0, 0%, 77%);
     border-radius: 2px;
     text-align: left;
     direction: ltr;
@@ -286,6 +285,7 @@ pre {
 }
 /* ckeditor5-code-block/theme/codeblock.css */
 pre code {
+    white-space: pre-wrap;
     background: unset;
     padding: 0;
     border-radius: 0;

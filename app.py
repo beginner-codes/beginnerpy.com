@@ -226,12 +226,18 @@ def page(category, link):
 	session = Session()
 	article = session.query(Article).filter_by(link=link).first()
 	session.close()
-	
+
 	# Some unnecessary elements the editor places into the html structure needfixing
 	article.content = article.content.replace(' contenteditable="true"', '')
 	article.content = article.content.replace('ck ck-widget__selection-handle', 'hide')
 	article.summary = article.summary.replace(' contenteditable="true"', '')
 	article.summary = article.summary.replace('ck ck-widget__selection-handle', 'hide')
+
+	# Fix removed <br> tags in code blocks by replacing them with \n
+
+	# Split text by <pre and </pre> tags
+	article.summary = replaceBr(article.summary)
+	article.content = replaceBr(article.content)
 
 	context = {
 		"sidenav": sidenav,
@@ -240,6 +246,21 @@ def page(category, link):
 		"property": "front"
 	}
 	return render_template("page.html", **context)
+
+
+def replaceBr(string):
+	summ = re.findall(r"<code|</code>|.+?(?=<code|</code>|$)", string)
+	insidePre = False
+	for item in summ:
+		if insidePre:
+			summ[summ.index(item)] = item.replace("<br>", "\n")
+		if item == "<code":
+			insidePre = True
+		else:
+			insidePre = False
+	string = "".join(summ)
+	return string
+
 
 
 # Main admin page, displays all the data we collect and create throughout the site
@@ -380,6 +401,8 @@ def edit(link):
 	tags = session.query(Tag)
 	modules = session.query(Module)
 	article = session.query(Article).filter_by(link=link).first()
+	article.summary = replaceBr(article.summary)
+	article.content = replaceBr(article.content)
 	session.close()
 	context = {
 		"sidenav": getSideNav(),
@@ -534,6 +557,7 @@ def save_article():
 	link = request.form.get("link")
 	content = request.form.get("content")
 	summary = request.form.get("summary")
+
 	modules = []
 	tags = []
 	session = Session()
