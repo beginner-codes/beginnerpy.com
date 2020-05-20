@@ -237,14 +237,16 @@ def page(category, link):
 	article.summary = replaceBr(article.summary)
 	article.content = replaceBr(article.content)
 
-	context = {
-		"sidenav": sidenav,
-		"article": article,
-		"endpoint": "article_view",
-		"property": "front"
-	}
-	return render_template("page.html", **context)
+	if (current_user.is_authenticated and current_user.is_admin) or article.draft == 0:
+		context = {
+			"sidenav": sidenav,
+			"article": article,
+			"endpoint": "article_view",
+			"property": "front"
+		}
+		return render_template("page.html", **context)
 
+	return redirect(url_for("index"))
 
 def replaceBr(string):
 	summ = re.findall(r"<code|</code>|.+?(?=<code|</code>|$)", string)
