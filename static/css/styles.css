@@ -45,12 +45,28 @@ a:hover {
 	color: #FFF;
 	background-color: #306998;
 }
+.btn-primary {
+	background-color: #306998;
+	border-color: #306998;
+}
+.btn-primary:hover {
+	background-color: #104978;
+	border-color: #104978;
+}
 .article-content {
 	font-size: 1.1em;
 }
 .article-content code, .article-content pre {
 	font-size: .88em;
 	border-radius: 5px;
+}
+.article-content h3 {
+	margin-top: 30px;
+	margin-bottom: 15px;
+	color: #306998;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #306998;
+	font-weight: 400;
 }
 .navbar-light {
 	background-color: #DEDEDE;
@@ -318,7 +334,7 @@ a:hover {
 	padding: 10px;
 	position: fixed;
 	left: calc(50% - 495px);
-	top: 20px;
+	top: 10px;
 	background-color: rgba(250,250,250,.8);
 	border-radius: 5px;
 	box-shadow: 0 10px 10px #BBB;
@@ -365,6 +381,11 @@ a:hover {
 
 .title-clear {
 	clear: both;
+}
+h2.title-clear {
+	padding-top: 10px;
+	font-size: 2.5rem;
+	font-weight: 400;
 }
 
 

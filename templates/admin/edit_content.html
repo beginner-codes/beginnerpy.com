@@ -14,7 +14,8 @@
 			<div class="col-6 alignr custom-control custom-checkbox">
 				<input type="checkbox" class="custom-control-input mt-2" id="draft" name="draft" {% if article.draft == 0 %}checked{% endif %}>
 				<label class="custom-control-label mt-2 mr-2" for="draft">Publish live</label>
-				<button class="btn btn-outline-primary" title="Save Article" onclick="submitForm()"><i class="fas fa-save"></i>&nbsp; UPDATE</button>
+				<a href="/{{ article.category.link }}/{{ article.link }}" target="new" class="btn btn-outline-primary" title="Preview draft in new tab"><i class="far fa-eye"></i>&nbsp; Preview</a>
+				<button class="btn btn-primary" title="Save Article" onclick="submitForm()"><i class="fas fa-save"></i>&nbsp; UPDATE</button>
 			</div>
 		</div>
 		<div class="row">

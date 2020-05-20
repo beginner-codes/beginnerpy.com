@@ -25,11 +25,11 @@
 				<p class="ib"> {{ article.author.displayname }}, <small class="text-muted">{{ article.date_created.strftime('%d %B %Y, %H:%M') }}</small></p>
 			</div>
 			{% if article.summary %}
-			<h2>The point</h2>
+			<h2 class="title-clear">The point</h2>
 			<div class="article-content">
 				{{ article.summary|safe }}
 			</div>
-			<h2 class="title-clear">The details</h2>
+			<h2 class="title-clear mt-4">The details</h2>
 			{% endif %}
 			<div class="article-content">
 				{{ article.content|safe }}
