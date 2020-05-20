@@ -387,4 +387,7 @@ pre[data-language="Plain text"] code {
 	.nav-item-mobile .nav-link {
 		padding: 18px 0;
 	}
+	.nav-item-mobile .sidenav-toggle {
+		max-width: 50px;
+	}
 }

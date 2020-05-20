@@ -5,7 +5,7 @@
 <h2 class="pt-4 pb-4">Latest Content</h2>
 <div class="row">
 	{% for item in content %}
-	<div class="col-6">
+	<div class="col-lg-6 col-md-12">
 		<a class="list-btn" href="/{{ item.category.link }}/{{ item.link }}">
 			<div class="list-btn-title">{{ item.title }}</div>
 			<div class="badge list-btn-category">{{ item.category.name }}</div>
