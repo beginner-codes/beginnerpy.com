@@ -45,6 +45,7 @@
 						<th scope="col">Name</th>
 						<th scope="col">Title</th>
 						<th scope="col">Link</th>
+						<th scope="col">Clicks</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -54,6 +55,7 @@
 						<td scope="col">{{ article.name }}</td>
 						<td scope="col">{{ article.title }}</td>
 						<td scope="col">{{ article.link }}</td>
+						<td scope="col">{{ article.clickCount }}</td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -66,6 +68,7 @@
 						<th scope="col">Created</th>
 						<th scope="col">Last Modified</th>
 						<th scope="col">Status</th>
+						<th scope="col">Views</th>
 						<th scope="col">Raw</th>
 					</tr>
 				</thead>
@@ -78,6 +81,7 @@
 						<td scope="col">{{ article.date_created.strftime('%d %B %Y, %H:%M') }}</td>
 						<td scope="col">{% if article.last_modified %}{{ article.last_modified.strftime('%d %B %Y, %H:%M') }}{% else %} {% endif %}</td>
 						<td scope="col">{% if article.draft == 1 %}Draft{% else %}Live{% endif %}</td>
+						<td scope="col">{{ article.viewCount }}</td>
 						<th scope="col"><a href="/admin/db/{{ article.id }}">View</a></th>
 					</tr>
 					{% endfor %}
