@@ -8,6 +8,7 @@
 
 		<meta property="twitter:card "   content="summary_large_image" />
 		<meta property="twitter:image"   content="/static/img/ogimage.png" />
+    
 		<meta property="og:type"         content="{% if endpoint == 'article_view' %}article{% else %}website{% endif %}" />
 		<meta property="og:image"        content="/static/img/ogimage.png" />
 		<meta property="og:description"  content="{% if endpoint == 'article_view' %}This article explains {{ article.title.lower() }}{% else %}Helping people learn Python programming together with the beginner.py Discord server{% endif %}" />
