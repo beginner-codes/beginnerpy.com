@@ -16,7 +16,7 @@ services:
     depends_on:
       - postgres_db
     build: .
-    command: poetry run gunicorn -w 1 --bind=0.0.0.0:5000 app:app
+    command: poetry run gunicorn -w 1 --bind=0.0.0.0:5000 beginnerpy.app:app
     env_file:
       - site.config
     ports:
