@@ -214,9 +214,13 @@ def category(category_link):
 
 # Displays an article to the user
 @app.route('/<category>/<link>')
-def page(category, link):
+@app.route('/<category>/<module>/<link>')
+def page(category, link, module=None):
 	session = Session()
-	article = session.query(Article).filter_by(link=link).first()
+	if module:
+		article = session.query(Article).filter_by(link=module+"/"+link).first()
+	else:
+		article = session.query(Article).filter_by(link=link).first()
 	article.viewCount = article.viewCount + 1
 	session.commit()
 	session.close()
@@ -224,7 +228,10 @@ def page(category, link):
 	sidenav = getSideNav()
 
 	session = Session()
-	article = session.query(Article).filter_by(link=link).first()
+	if module:
+		article = session.query(Article).filter_by(link=module+"/"+link).first()
+	else:
+		article = session.query(Article).filter_by(link=link).first()
 	session.close()
 
 	# Some unnecessary elements the editor places into the html structure needfixing
@@ -248,6 +255,7 @@ def page(category, link):
 
 	return redirect(url_for("index"))
 
+
 def replaceBr(string):
 	summ = re.findall(r"<code|</code>|.+?(?=<code|</code>|$)", string)
 	insidePre = False
@@ -260,7 +268,6 @@ def replaceBr(string):
 			insidePre = False
 	string = "".join(summ)
 	return string
-
 
 
 # Main admin page, displays all the data we collect and create throughout the site
@@ -415,12 +422,17 @@ def save_item():
 
 # Loads an existing article for editing
 @app.route('/admin/edit/<link>')
+@app.route('/admin/edit/<module>/<link>')
 @login_required
-def edit(link):
+def edit(link, module=None):
 	session = Session()
 	tags = session.query(Tag)
 	modules = session.query(Module)
-	article = session.query(Article).filter_by(link=link).first()
+	if module:
+		article = session.query(Article).filter_by(link=module+"/"+link).first()
+	else:
+		article = session.query(Article).filter_by(link=link).first()
+	print(article.link)
 	article.summary = replaceBr(article.summary)
 	article.content = replaceBr(article.content)
 	session.close()
@@ -607,8 +619,15 @@ def save_article():
 	# If the article exists, update it.
 	if article:
 		article.title = title
-		urlsafe = link[-7:]
-		article.link = title.replace(" ", "-").replace("()", "").lower() + "-" + urlsafe
+		if category == "9":
+			modulename = ""
+			for module in moduleslist:
+				if module.id == int(modules[0]):
+					modulename = module.link
+					break
+			article.link = modulename + "/" + title.replace(" ", "-").replace("(", "").replace(")", "").lower()
+		else:
+			article.link = title.replace(" ", "-").replace("(", "").replace(")", "").lower()
 		article.content = content
 		article.summary = summary
 		article.draft = draft
@@ -625,7 +644,15 @@ def save_article():
 
 		flash(f"The article <strong>{title}</strong> was successfully updated.", "success")
 	else:
-		link = title.replace(" ", "-").lower().replace("()", "").lower() + "-" + token_urlsafe(5)
+		if category == "9":
+			modulename = ""
+			for module in moduleslist:
+				if module.id == int(modules[0]):
+					modulename = module.link
+					break
+			link = modulename + "/" + title.replace(" ", "-").replace("(", "").replace(")", "").lower()
+		else:
+			link = title.replace(" ", "-").replace("(", "").replace(")", "").lower()
 		article = Article(
 			title = title,
 			author_id = current_user.id,
