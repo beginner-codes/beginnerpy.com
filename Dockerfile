@@ -12,4 +12,4 @@ RUN poetry install
 USER 1000:1000
 
 COPY beginnerpy beginnerpy
-CMD ["poetry", "run", "gunicorn", "-w 4", "--bind=0.0.0.0:5000", "beginnerpy.app:app"]
+CMD ["poetry", "run", "gunicorn", "-w 4", "--bind=0.0.0.0:5000", "beginnerpy:app"]
