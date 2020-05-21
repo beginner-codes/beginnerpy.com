@@ -79,30 +79,31 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 
-# @app.route('/register', methods=['POST', 'GET'])
-# def register():
-# 	session = Session()
-# 	form = RegistrationForm()
-# 	if form.validate_on_submit():
-# 		hashed_pw = generate_password_hash(form.password.data).decode("utf-8")
-# 		user = Useraccount(
-# 			email=form.email.data,
-# 			password=hashed_pw,
-# 			displayname=form.displayname.data
-# 		)
-# 		session.add(user)
-# 		session.commit()
-# 		flash(f"Your registration for {form.email.data} was successful!", "success")
-# 		session.close()
-# 		return redirect(url_for("login"))
-# 	session.close()
-# 	context = {
-# 		"form": form,
-# 		"sidenav": getSideNav(),
-# 		"property": "front",
-# 		"endpoint": "register"
-# 	}
-# 	return render_template("register.html", **context)
+@app.route("/register", methods=["POST", "GET"])
+def register():
+    if os.environ.get("PRODUCTION", "DEV") != "DEV":
+        return redirect(url_for("admin"))
+
+    session = Session()
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_pw = generate_password_hash(form.password.data).decode("utf-8")
+        user = Useraccount(
+            email=form.email.data, password=hashed_pw, displayname=form.displayname.data
+        )
+        session.add(user)
+        session.commit()
+        flash(f"Your registration for {form.email.data} was successful!", "success")
+        session.close()
+        return redirect(url_for("login"))
+    session.close()
+    context = {
+        "form": form,
+        "sidenav": getSideNav(),
+        "property": "front",
+        "endpoint": "register",
+    }
+    return render_template("register.html", **context)
 
 
 @app.route("/login", methods=["POST", "GET"])
