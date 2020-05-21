@@ -18,8 +18,10 @@ from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 
 from beginnerpy.models import *
+from beginnerpy.bot.challenges import challenges_blueprint
 
 app = Flask(__name__)
+app.register_blueprint(challenges_blueprint)
 
 app.secret_key = os.environ.get("SECRET_KEY", "safe-for-committing")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
