@@ -4,14 +4,14 @@
 
 {% block admin_main %}
 <div class="container">
-	<form method="POST" action="{{ url_for('save_category') }}">
+	<form id="category_form" method="POST" action="{{ url_for('save_category') }}">
 		<input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 		<div class="row pt-4 pb-4">
 			<div class="col-6">
 				<h2>New Category</h2>
 			</div>
 			<div class="col-6 alignr custom-control custom-checkbox">
-				<button type="submit" class="btn btn-outline-primary" title="Save Category"><i class="fas fa-save"></i>&nbsp; SAVE</a>
+				<button class="btn btn-outline-primary" title="Save Category" onclick="submitForm()"><i class="fas fa-save"></i>&nbsp; SAVE</a>
 			</div>
 		</div>
 		<div class="row">
@@ -28,8 +28,10 @@
 				<input id="formtitle" type="text" name="formtitle" class="form-control mb-2">
 			</div>
 			<div class="col-12">
-				<label for="description"><small>Description</small></label>
-				<textarea id="description" name="description"></textarea>
+				<input id="description" type="hidden" name="description" />
+				<label for="description_field"><small>Description</small></label>
+				<div id="toolbar"></div>
+				<div contenteditable="true" class="richtext-small form-control" id="description_field" name="description_field"></div>
 			</div>
 		</div>
 	</form>
@@ -37,23 +39,6 @@
 {% endblock %}
 
 {% block scripts_bottom %}
-<script type="text/javascript" src="/static/js/admin.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#description').summernote({
-			toolbar: [
-				['style', ['style']],
-				['font', ['bold', 'underline', 'italic', 'clear']],
-				['fontname', ['fontname', 'fontsize']],
-				['color', ['color']],
-				['para', ['ul', 'ol', 'paragraph']],
-				['table', ['table']],
-				['insert', ['link', 'picture', 'video']],
-				['view', ['codeview', 'help']],
-			]
-		});
-	});
-</script>
+<script type="text/javascript" src="/static/ckeditor5/build/ckeditor.js"></script>
+<script type="text/javascript" src="/static/js/category_editor.js"></script>
 {% endblock %}
