@@ -59,13 +59,35 @@
 					</tr>
 					{% endfor %}
 				</tbody>
-				{% else%}
+				{% elif category.name == "Rules" %}
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Type</th>
+						<th scope="col">Title</th>
+						<th scope="col">Label</th>
+						<th scope="col">Author</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for article in articles %}
+					{% set target = url_for("rules.edit_rule", rule_title=article.title) %}
+					<tr class="table-row-clickable" onclick="window.location='{{ target }}';">
+						<th scope="row">{{ article.id }}</th>
+						<td scope="col">{{ article.message_type }}</td>
+						<td scope="col">{{ article.title }}</td>
+						<td scope="col">{{ article.label }}</td>
+						<td scope="col">{{ article.author }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+				{% else %}
 				<thead>
 					<tr>
 						<th scope="col">Id</th>
 						<th scope="col">Title</th>
 						<th scope="col">Author</th>
-						<th scope="col">Created</th>
+						<th scope="col">Created / Published</th>
 						<th scope="col">Last Modified</th>
 						<th scope="col">Status</th>
 						<th scope="col">Views</th>
@@ -80,9 +102,13 @@
 						<td scope="col">{{ article.author.displayname }}</td>
 						<td scope="col">{{ article.date_created.strftime('%d %B %Y, %H:%M') }}</td>
 						<td scope="col">{% if article.last_modified %}{{ article.last_modified.strftime('%d %B %Y, %H:%M') }}{% else %} {% endif %}</td>
-						<td scope="col">{% if article.draft == 1 %}Draft{% else %}Live{% endif %}</td>
+						{% if article.draft %}
+						<td scope="col" class="red">Draft</td>
+						{% else %}
+						<td scope="col" class="green">Live</td>
+						{% endif %}
 						<td scope="col">{{ article.viewCount }}</td>
-						<th scope="col"><a href="/admin/db/{{ article.id }}">View</a></th>
+						<td scope="col"><a href="/admin/db/{{ article.id }}">View</a></td>
 					</tr>
 					{% endfor %}
 				</tbody>

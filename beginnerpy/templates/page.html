@@ -22,7 +22,7 @@
 			</div>
 			<div class="author-card mb-3">
 				<img class="avatar-small" src="/static/assets/userimg/{{ article.author.id }}.jpg">
-				<p class="ib"> {{ article.author.displayname }}, <small class="text-muted">{{ article.date_created.strftime('%d %B %Y, %H:%M') }}</small></p>
+				<p class="ib"> {{ article.author.displayname }}, <small class="text-muted">{{ article.date_created.strftime('%d %B %Y') }}</small></p>
 			</div>
 			{% if article.summary %}
 			<h2 class="title-clear">The point</h2>

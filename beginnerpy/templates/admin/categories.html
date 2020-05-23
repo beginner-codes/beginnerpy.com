@@ -40,6 +40,7 @@
 						<th scope="col">Form Title</th>
 						<th scope="col">Active</th>
 						<th scope="col">Description</th>
+						<th scope="col">Bot Category</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -50,8 +51,9 @@
 						<td scope="col">{{ category.link }}</td>
 						<td scope="col">{{ category.buttonlabel }}</td>
 						<td scope="col">{{ category.formtitle }}</td>
-						<td scope="col" style="{% if category.active == True %}color: #00CC00;{% else %}color: #CC0000;{% endif %}">{{ category.active }}</td>
+						<td scope="col" class="{% if category.active == True %}green{% else %}red{% endif %}">{{ category.active }}</td>
 						<td scope="col">{% if category.description %}Yes{% else %}No{% endif %}</td>
+						<td scope="col">{{ category.bot }}</td>
 					</tr>
 					{% endfor %}
 				</tbody>

@@ -205,6 +205,12 @@ a:hover {
 .bg-red {
 	background-color: #FF3333;
 }
+.green {
+	color: #33BB33;
+}
+.bg-green {
+	background-color: #33BB33;
+}
 
 .article-pill {
 	background-color: #DEDEDE;
