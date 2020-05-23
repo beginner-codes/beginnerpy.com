@@ -102,13 +102,9 @@
 						<td scope="col">{{ article.author.displayname }}</td>
 						<td scope="col">{{ article.date_created.strftime('%d %B %Y, %H:%M') }}</td>
 						<td scope="col">{% if article.last_modified %}{{ article.last_modified.strftime('%d %B %Y, %H:%M') }}{% else %} {% endif %}</td>
-						{% if article.draft %}
-						<td scope="col" class="red">Draft</td>
-						{% else %}
-						<td scope="col" class="green">Live</td>
-						{% endif %}
+						<td scope="col">{% if article.draft == 1 %}Draft{% else %}Live{% endif %}</td>
 						<td scope="col">{{ article.viewCount }}</td>
-						<td scope="col"><a href="/admin/db/{{ article.id }}">View</a></td>
+						<th scope="col"><a href="/admin/db/{{ article.id }}">View</a></th>
 					</tr>
 					{% endfor %}
 				</tbody>
