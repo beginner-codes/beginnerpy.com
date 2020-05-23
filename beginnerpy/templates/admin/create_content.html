@@ -28,6 +28,38 @@
 		</div>
 	</form>
 </div>
+{% elif category.name == "Rules" %}
+<div class="container">
+	<form method="POST" action="{{ url_for('rules.save_rule') }}">
+		<div class="row pt-4 pb-4">
+			<div class="col-6">
+				<h2>{{ category.formtitle }}</h2>
+			</div>
+			<div class="col-6 alignr custom-control custom-checkbox">
+				<button type="submit" class="btn btn-outline-primary" title="Save Item"><i class="fas fa-save"></i>&nbsp; SAVE</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+				<input id="type" type="hidden" name="type" value="{{ category.name }}" />
+				<label for="message_type"><small>Type</small></label>
+				<select id="message_type" type="text" name="message_type" class="form-control mb-2">
+					<option value="RULE" selected>Rule</option>
+					<option value="TIP">Tip</option>
+				</select>
+				<label for="title"><small>Title</small></label>
+				<input id="title" type="text" name="title" class="form-control mb-2">
+				<label for="author"><small>Author</small></label>
+				<input id="author" type="text" name="author" class="form-control mb-2">
+				<label for="label"><small>Labels</small></label>
+				<input id="label" type="text" name="label" class="form-control mb-2">
+				<label for="message"><small>Message</small></label>
+				<textarea id="message" type="text" name="message" class="form-control mb-2"></textarea>
+			</div>
+		</div>
+	</form>
+</div>
 {% else %}
 <div id="toolbar1" class="toolbar-container"></div>
 <div id="toolbar2" class="toolbar-container hide"></div>

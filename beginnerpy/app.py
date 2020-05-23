@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
 import re
+import psycopg2
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import (
 	LoginManager,
@@ -20,9 +21,11 @@ from sqlalchemy.orm import sessionmaker
 from beginnerpy.models import *
 from beginnerpy.func import getSideNav
 from beginnerpy.bot.challenges import challenges_blueprint
+from beginnerpy.bot.rules import rules_blueprint
 
 app = Flask(__name__)
 app.register_blueprint(challenges_blueprint)
+app.register_blueprint(rules_blueprint)
 
 app.secret_key = os.environ.get("SECRET_KEY", "safe-for-committing")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -341,13 +344,18 @@ def admin_categories():
 @login_required
 def admin_category(category_link):
 	sidenav = getSideNav()
-	cat = [item for item in sidenav if item["link"] == category_link][0]
+	try:
+		cat = [item for item in sidenav if item["link"] == category_link][0]
+	except IndexError:
+		cat = [item for item in sidenav if item["title"] == category_link][0]
 	cid = cat["id"]
 	session = Session()
 	if cat["name"] == "Modules":
 		items = session.query(Module).order_by(Module.name)
 	elif cat["name"] == "Tags":
 		items = session.query(Tag).order_by(Tag.name)
+	elif category_link == "messages":
+		items = session.query(Message).order_by(Message.title)
 	else:
 		items = (
 			session.query(Article)
@@ -363,7 +371,7 @@ def admin_category(category_link):
 		"articles": items,
 		"property": "admin",
 	}
-	if cat["name"] != "Modules" and cat["name"] != "Tags":
+	if cat["name"] not in ["Modules", "Tags"] and category_link != "messages":
 		context["draft"] = draft
 		context["live"] = live
 	return render_template("admin/category.html", **context)
@@ -408,7 +416,6 @@ def save_item():
 	item_name = request.form.get("name")
 	item_title = request.form.get("title")
 	item_link = request.form.get("link")
-	print(item_type, item_name, item_title, item_link)
 	session = Session()
 	if item_type.lower() == "tags":
 		tag = session.query(Tag).filter_by(link=item_link).first()
@@ -517,12 +524,18 @@ def save_category():
 	buttonlabel = request.form.get("buttonlabel")
 	formtitle = request.form.get("formtitle")
 	description = request.form.get("description")
+	bot = request.form.get("bot")
+	if bot == "on":
+		bot = 1
+	else:
+		bot = 0
 	session = Session()
 	category = session.query(Category).filter_by(link=link).first()
 	# If the category exists, update it.
 	if category:
 		category.name = title
 		category.link = link
+		category.bot = bot
 		category.buttonlabel = buttonlabel
 		category.formtitle = formtitle
 		category.description = (
@@ -538,6 +551,7 @@ def save_category():
 		category = Category(
 			name=title,
 			link=link,
+			bot=bot,
 			description=description,
 			buttonlabel=buttonlabel,
 			formtitle=formtitle,
@@ -672,40 +686,26 @@ def save_article():
 				if module.id == int(modules[0]):
 					modulename = module.link
 					break
-			article.link = (
-				modulename
-				+ "/"
-				+ title.replace(" ", "-").replace("(", "").replace(")", "").lower()
-			)
+			article.link = modulename + "/" + title.replace(" ", "-").replace("(", "").replace(")", "").lower()
 		else:
-			article.link = (
-				title.replace(" ", "-").replace("(", "").replace(")", "").lower()
-			)
+			article.link = title.replace(" ", "-").replace("(", "").replace(")", "").lower()
 		article.content = content
 		article.summary = summary
+		if article.draft == 0 and draft == 1:
+			article.date_created = datetime.now()
 		article.draft = draft
 		article.last_modified = datetime.now()
 
-		session.execute(
-			articleTags.delete().where(articleTags.c.article_id == article.id)
-		)
-		session.execute(
-			articleModules.delete().where(articleModules.c.article_id == article.id)
-		)
+		session.execute(articleTags.delete().where(articleTags.c.article_id == article.id))
+		session.execute(articleModules.delete().where(articleModules.c.article_id == article.id))
 		session.commit()
 
 		for item in tags:
-			session.execute(
-				articleTags.insert().values(article_id=article.id, tag_id=item)
-			)
+			session.execute(articleTags.insert().values(article_id=article.id, tag_id=item))
 		for item in modules:
-			session.execute(
-				articleModules.insert().values(article_id=article.id, module_id=item)
-			)
+			session.execute(articleModules.insert().values(article_id=article.id, module_id=item))
 
-		flash(
-			f"The article <strong>{title}</strong> was successfully updated.", "success"
-		)
+		flash(f"The article <strong>{title}</strong> was successfully updated.", "success")
 	else:
 		if category == "9":
 			modulename = ""
@@ -713,11 +713,7 @@ def save_article():
 				if module.id == int(modules[0]):
 					modulename = module.link
 					break
-			link = (
-				modulename
-				+ "/"
-				+ title.replace(" ", "-").replace("(", "").replace(")", "").lower()
-			)
+			link = modulename + "/" + title.replace(" ", "-").replace("(", "").replace(")", "").lower()
 		else:
 			link = title.replace(" ", "-").replace("(", "").replace(")", "").lower()
 		article = Article(
@@ -735,17 +731,11 @@ def save_article():
 		session.commit()
 		article = session.query(Article).filter_by(link=link).first()
 		for item in tags:
-			session.execute(
-				articleTags.insert().values(article_id=article.id, tag_id=item)
-			)
+			session.execute(articleTags.insert().values(article_id=article.id, tag_id=item))
 		for item in modules:
-			session.execute(
-				articleModules.insert().values(article_id=article.id, module_id=item)
-			)
+			session.execute(articleModules.insert().values(article_id=article.id, module_id=item))
 
-		flash(
-			f"The article <strong>{title}</strong> was successfully created.", "success"
-		)
+		flash(f"The article <strong>{title}</strong> was successfully created.", "success")
 	session.commit()
 	session.close()
 	return redirect(url_for("admin_category", category_link=cat_link))
@@ -801,6 +791,18 @@ def build_db():
 		session = Session()
 		build(engine, session)
 		session.close()
+
+	connection = psycopg2.connect(f"dbname={dbname} user={user} password={password}")
+	cursor = connection.cursor()
+	cursor.execute("ALTER TABLE category ADD COLUMN IF NOT EXISTS bot INTEGER NOT NULL DEFAULT 0;")
+	connection.commit()
+
+	cursor.execute("CREATE TABLE IF NOT EXISTS message (id serial PRIMARY KEY, message_type varchar(20) NOT NULL, message varchar(2000) NOT NULL, title varchar(200) NOT NULL, label varchar(100) NOT NULL, author varchar(100) NOT NULL);")
+	connection.commit()
+
+	cursor.close()
+	connection.close()
+
 	return redirect(url_for("admin"))
 
 

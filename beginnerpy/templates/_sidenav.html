@@ -11,16 +11,22 @@
 <ul class="nav flex-column">
 	{% if current_user.is_admin and property == "admin" %}
 		{% for category in sidenav %}
+			{% if category.bot == 0 %}
 			<li class="nav-item">
 				<a class="nav-link {% if category.active == False %}red{% endif %}" href="/admin/category/{{ category.link }}">{{ category.name }}</a>
 			</li>
+			{% endif %}
 		{% endfor %}
 		<li class="nav-item dropright">
 			<a class="nav-link dropdown-toggle red" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Discord Bot</a>
 			<div class="dropdown-menu">
-				<a class="dropdown-item" href="/admin/bot/challenges">Challenges</a>
-				<a class="dropdown-item" href="#">Rules</a>
+				{% for category in sidenav %}
+					{% if category.bot == 1 %}
+					<a class="dropdown-item" href="/admin/category/{{ category.link }}">{{ category.name }}</a>
+					{% endif %}
+				{% endfor %}
 				<a class="dropdown-item" href="#">User Scores</a>
+
 			</div>
 		</li>
 	{% elif current_user.is_anonymous or property == "front" %}

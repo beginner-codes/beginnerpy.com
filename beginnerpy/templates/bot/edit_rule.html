@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block title %}Edit Item | Admin | {{ super() }}{% endblock %}
+
+{% block admin_main %}
+<div class="container">
+	<form id="discord_form" method="POST" action="{{ url_for('rules.save_rule') }}">
+		<div class="row pt-4 pb-4">
+			<div class="col-6">
+				<h2>Edit {{ item.title }} <small class="text-muted smalltext">&nbsp;&nbsp;<a class="delete-link" href="{{ url_for('rules.delete_rule', item_title=item.title) }}" title="Delete {{ item.title }}"><i class="far fa-trash-alt"></i>&nbsp; Delete</a></small></h2>
+			</div>
+			<div class="col-6 alignr custom-control custom-checkbox">
+				<button class="btn btn-outline-primary" title="Save Item" onclick="submitForm()"><i class="fas fa-save"></i>&nbsp; SAVE</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+				<input id="type" type="hidden" name="type" value="{{ category.name }}" />
+				<label for="message_type"><small>Type</small></label>
+				<select id="message_type" type="text" name="message_type" class="form-control mb-2">
+					<option value="RULE" {% if item.message_type == 'RULE'%}selected{% endif %}>Rule</option>
+					<option value="TIP" {% if item.message_type == 'TIP'%}selected{% endif %}>Tip</option>
+				</select>
+				<label for="title"><small>Title</small></label>
+				<input type="hidden" name="previous_title" value="{{ item.title }}">
+				<input id="title" type="text" name="title" class="form-control mb-2" value="{{ item.title }}">
+				<label for="author"><small>Author</small></label>
+				<input id="author" type="text" name="author" class="form-control mb-2" value="{{ item.author }}">
+				<label for="label"><small>Labels</small></label>
+				<input id="label" type="text" name="label" class="form-control mb-2" value="{{ item.label }}">
+				<input id="discord" type="hidden" name="message" />
+				<label for="discord_field"><small>Message</small></label>
+				<div id="toolbar"></div>
+				<div contenteditable="true" class="richtext-small form-control" id="discord_field" name="discord_field">{{ item.message|safe }}</div>
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock %}
+
+{% block scripts_bottom %}
+<script type="text/javascript" src="/static/ckeditor5/build/ckeditor.js"></script>
+<script type="text/javascript" src="/static/js/discord_editor.js"></script>
+{% endblock %}

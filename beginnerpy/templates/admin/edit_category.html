@@ -28,6 +28,13 @@
 				<input id="formtitle" type="text" name="formtitle" class="form-control mb-2" value="{{ category.formtitle }}">
 			</div>
 			<div class="col-12">
+				<label for="title"><small>Bot Menu</small></label>
+				<div class="col-6 custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input mt-2" id="bot" name="bot" {% if category.bot == 1 %}checked{% endif %}>
+					<label class="custom-control-label mr-2" for="bot">Category is part of discord.py bot</label>
+				</div>
+			</div>
+			<div class="col-12 mt-4">
 				<input id="description" type="hidden" name="description" />
 				<label for="description_field"><small>Description</small></label>
 				<div id="toolbar"></div>

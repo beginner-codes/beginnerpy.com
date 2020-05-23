@@ -1,7 +1,8 @@
 from flask_login import UserMixin
-from sqlalchemy import Column, Integer, BIGINT, String, Boolean, ForeignKey, Table, Text, DateTime
+from sqlalchemy import create_engine, Column, Integer, BIGINT, String, Boolean, ForeignKey, Table, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+import os
 
 Base = declarative_base()
 
@@ -101,6 +102,7 @@ class Category(Base):
 	id = Column(Integer, primary_key=True, unique=True, nullable=False)
 	name = Column(String(50), unique=True, nullable=False, index=True)
 	link = Column(String(50), unique=True, nullable=False)
+	bot = Column(Integer, nullable = False, default = 0)
 	formtitle = Column(String(50), nullable=False)
 	buttonlabel = Column(String(50), nullable=False)
 	description = Column(String(), default=None)
@@ -128,6 +130,17 @@ class Article(Base):
 	notUsefulCount = Column(Integer, default=0)
 	modules = relationship('Module', secondary='articleModules', backref='articles', lazy='joined')
 	tags = relationship('Tag', secondary='articleTags', backref='articles', lazy='joined')
+
+
+class Message(Base):
+	__tablename__ = "message"
+
+	id = Column(Integer, primary_key=True, unique=True, nullable=False, index=True)
+	message_type = Column(String(20))  # RULE, TIP, etc.
+	message = Column(String(2000), nullable=False, default="")
+	title = Column(String(200), unique=True, nullable=False, default="")
+	label = Column(String(100), nullable=False, default="")
+	author = Column(String(100), nullable=False, default="")
 
 
 def build(engine, session):

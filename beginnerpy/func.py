@@ -28,6 +28,7 @@ def getSideNav():
 				"id": item.id,
 				"name": item.name,
 				"link": item.link,
+				"bot": item.bot,
 				"active": item.active,
 				"viewCount": item.viewCount,
 				"formtitle": item.formtitle,
