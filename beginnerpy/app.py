@@ -822,12 +822,10 @@ def build_db():
         connection.execute(
             "ALTER TABLE category ADD COLUMN IF NOT EXISTS bot INTEGER NOT NULL DEFAULT 0;"
         )
-        connection.commit()
 
         connection.execute(
             "CREATE TABLE IF NOT EXISTS message (id serial PRIMARY KEY, message_type varchar(20) NOT NULL, message varchar(2000) NOT NULL, title varchar(200) NOT NULL, label varchar(100) NOT NULL, author varchar(100) NOT NULL);"
         )
-        connection.commit()
 
     return redirect(url_for("admin"))
 
