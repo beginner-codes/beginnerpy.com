@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from beginnerpy.models import *
 from beginnerpy.func import getSideNav
 from flask_login import login_required
+import urllib.parse
 
 dbname = os.environ.get("DB_NAME", "beginnerpy")
 user = os.environ.get("DB_USER", "postgres")
@@ -45,7 +46,7 @@ def rules():
 def edit_rule(rule_title):
 	print(rule_title)
 	session = Session()
-	item = session.query(Message).filter_by(title=rule_title).first()
+	item = session.query(Message).filter_by(title=urllib.parse.unquote(rule_title)).first()
 	session.close()
 	context = {
 		"sidenav": getSideNav(),
