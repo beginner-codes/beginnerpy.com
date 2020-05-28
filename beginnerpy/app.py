@@ -22,7 +22,7 @@ app = Flask(__name__)
 app.register_blueprint(challenges_blueprint)
 app.register_blueprint(rules_blueprint)
 
-app.jinja_env.filters['quote_plus'] = lambda u: urllib.parse.quote_plus(u)
+app.jinja_env.filters['quote_plus'] = lambda f: urllib.parse.quote_plus(f)
 
 app.secret_key = os.environ.get("SECRET_KEY", "safe-for-committing")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
