@@ -71,7 +71,7 @@
 				</thead>
 				<tbody>
 					{% for article in articles %}
-					{% set target = url_for("rules.edit_rule", rule_title=article.title) %}
+					{% set target = url_for("rules.edit_rule", rule_title=article.title|quote_plus) %}
 					<tr class="table-row-clickable" onclick="window.location='{{ target }}';">
 						<th scope="row">{{ article.id }}</th>
 						<td scope="col">{{ article.message_type }}</td>
