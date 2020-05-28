@@ -44,7 +44,6 @@ def rules():
 
 @rules_blueprint.route("/edit_rule/<rule_title>")
 def edit_rule(rule_title):
-	print(rule_title)
 	session = Session()
 	item = session.query(Message).filter_by(title=urllib.parse.unquote(rule_title)).first()
 	session.close()
