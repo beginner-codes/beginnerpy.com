@@ -21,6 +21,7 @@
 				<select id="message_type" type="text" name="message_type" class="form-control mb-2">
 					<option value="RULE" {% if item.message_type == 'RULE'%}selected{% endif %}>Rule</option>
 					<option value="TIP" {% if item.message_type == 'TIP'%}selected{% endif %}>Tip</option>
+					<option value="HELP" {% if item.message_type == 'HELP'%}selected{% endif %}>Help</option>
 				</select>
 				<label for="title"><small>Title</small></label>
 				<input type="hidden" name="previous_title" value="{{ item.title }}">

@@ -30,13 +30,13 @@
 </div>
 {% elif category.name == "Rules" %}
 <div class="container">
-	<form method="POST" action="{{ url_for('rules.save_rule') }}">
+	<form id="discord_form" method="POST" action="{{ url_for('rules.save_rule') }}">
 		<div class="row pt-4 pb-4">
 			<div class="col-6">
 				<h2>{{ category.formtitle }}</h2>
 			</div>
 			<div class="col-6 alignr custom-control custom-checkbox">
-				<button type="submit" class="btn btn-outline-primary" title="Save Item"><i class="fas fa-save"></i>&nbsp; SAVE</button>
+				<button class="btn btn-outline-primary" title="Save Item" onclick="submitForm()"><i class="fas fa-save"></i>&nbsp; SAVE</button>
 			</div>
 		</div>
 		<div class="row">
@@ -47,6 +47,7 @@
 				<select id="message_type" type="text" name="message_type" class="form-control mb-2">
 					<option value="RULE" selected>Rule</option>
 					<option value="TIP">Tip</option>
+					<option value="HELP">Help</option>
 				</select>
 				<label for="title"><small>Title</small></label>
 				<input id="title" type="text" name="title" class="form-control mb-2">
@@ -54,8 +55,10 @@
 				<input id="author" type="text" name="author" class="form-control mb-2">
 				<label for="label"><small>Labels</small></label>
 				<input id="label" type="text" name="label" class="form-control mb-2">
-				<label for="message"><small>Message</small></label>
-				<textarea id="message" type="text" name="message" class="form-control mb-2"></textarea>
+				<input id="discord" type="hidden" name="message" />
+				<label for="discord_field"><small>Message</small></label>
+				<div id="toolbar"></div>
+				<div contenteditable="true" class="richtext-small form-control" id="discord_field" name="discord_field"></div>
 			</div>
 		</div>
 	</form>
@@ -119,5 +122,9 @@
 
 {% block scripts_bottom %}
 <script type="text/javascript" src="/static/ckeditor5/build/ckeditor.js"></script>
+{% if category.name == "Rules" %}
+<script type="text/javascript" src="/static/js/discord_editor.js"></script>
+{% else %}
 <script type="text/javascript" src="/static/js/richtext.js"></script>
+{% endif %}
 {% endblock %}

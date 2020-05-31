@@ -1,6 +1,8 @@
 DecoupledDocumentEditor.create( document.querySelector( '#discord_field' ), {
 	toolbar: {
 		items: [
+			'heading',
+			'|',
 			'bold',
 			'italic',
 			'underline',
