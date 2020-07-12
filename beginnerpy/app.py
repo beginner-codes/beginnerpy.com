@@ -3,14 +3,9 @@ import os
 import re
 import psycopg2
 import pickle
+import urllib.parse
 from flask import Flask, render_template, redirect, url_for, request, flash
-from flask_login import (
-    LoginManager,
-    login_user,
-    logout_user,
-    login_required,
-    current_user,
-)
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
@@ -27,6 +22,8 @@ from beginnerpy.bot.rules import rules_blueprint
 app = Flask(__name__)
 app.register_blueprint(challenges_blueprint)
 app.register_blueprint(rules_blueprint)
+
+app.jinja_env.filters['quote_plus'] = lambda f: urllib.parse.quote_plus(f)
 
 app.secret_key = os.environ.get("SECRET_KEY", "safe-for-committing")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -156,10 +153,10 @@ def index():
     session = Session()
     latest = (
         session.query(Article)
-        .filter_by(draft=0)
-        .order_by(desc(Article.date_created))
-        .limit(20)
-        .all()
+            .filter_by(draft=0)
+            .order_by(desc(Article.date_created))
+            .limit(20)
+            .all()
     )
     session.close()
     context = {
@@ -180,10 +177,10 @@ def module(module_link):
     session.commit()
     articles = (
         session.query(Article)
-        .filter_by(draft=0)
-        .join(articleModules)
-        .filter(articleModules.c.module_id == module.id)
-        .order_by(Article.date_created)
+            .filter_by(draft=0)
+            .join(articleModules)
+            .filter(articleModules.c.module_id == module.id)
+            .order_by(Article.date_created)
     )
     session.close()
     context = {
@@ -204,10 +201,10 @@ def tag(tag_link):
     session.commit()
     articles = (
         session.query(Article)
-        .filter_by(draft=0)
-        .join(articleTags)
-        .filter(articleTags.c.tag_id == tag.id)
-        .order_by(Article.date_created)
+            .filter_by(draft=0)
+            .join(articleTags)
+            .filter(articleTags.c.tag_id == tag.id)
+            .order_by(Article.date_created)
     )
     session.close()
     context = {
@@ -365,11 +362,15 @@ def admin_category(category_link):
         items = session.query(Tag).order_by(Tag.name)
     elif category_link == "messages":
         items = session.query(Message).order_by(Message.title)
+        for i in range(items.count()):
+            items[i].title = urllib.parse.quote(items[i].title, safe='')
+            print(items[i].title)
+        print(items[0].title)
     else:
         items = (
             session.query(Article)
-            .filter_by(category_id=int(cid))
-            .order_by(desc(Article.id))
+                .filter_by(category_id=int(cid))
+                .order_by(desc(Article.id))
         )
         draft = session.query(Article).filter_by(category_id=int(cid), draft=1).count()
         live = session.query(Article).filter_by(category_id=int(cid), draft=0).count()
@@ -696,9 +697,9 @@ def save_article():
                     modulename = module.link
                     break
             article.link = (
-                modulename
-                + "/"
-                + title.replace(" ", "-").replace("(", "").replace(")", "").lower()
+                    modulename
+                    + "/"
+                    + title.replace(" ", "-").replace("(", "").replace(")", "").lower()
             )
         else:
             article.link = (
@@ -739,9 +740,9 @@ def save_article():
                     modulename = module.link
                     break
             link = (
-                modulename
-                + "/"
-                + title.replace(" ", "-").replace("(", "").replace(")", "").lower()
+                    modulename
+                    + "/"
+                    + title.replace(" ", "-").replace("(", "").replace(")", "").lower()
             )
         else:
             link = title.replace(" ", "-").replace("(", "").replace(")", "").lower()
