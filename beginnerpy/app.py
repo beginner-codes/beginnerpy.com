@@ -85,6 +85,11 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 
+@app.route("/challenges/pip-version")
+def challenge_version():
+    return '{"version": "0.1.2"}', 200, {"content-type": "application/json"}
+
+
 @app.route("/register", methods=["POST", "GET"])
 def register():
     if os.environ.get("PRODUCTION", "DEV") != "DEV":
