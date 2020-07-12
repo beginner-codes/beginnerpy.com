@@ -2,6 +2,7 @@ from datetime import datetime
 import os
 import re
 import psycopg2
+import pickle
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import (
     LoginManager,
@@ -32,12 +33,12 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 DEBUG = os.environ.get("PRODUCTION", False) is False
 
 Base = declarative_base()
-dbname = os.environ.get("DB_NAME", "beginnerpy")
-user = os.environ.get("DB_USER", "postgres")
-host = os.environ.get("DB_HOST", "127.0.0.1")
+dbname = os.environ.get("DB_NAME", "bpydb")
+user = os.environ.get("DB_USER", "postgresadmin")
+host = os.environ.get("DB_HOST", "0.0.0.0")
 port = os.environ.get("DB_PORT", "5432")
 sslmode = "require" if os.environ.get("PRODUCTION", False) else None
-password = os.environ.get("DB_PASSWORD", "P7COFca3DBgu3j")
+password = os.environ.get("DB_PASSWORD", "dev-env-password-safe-to-be-public")
 
 engine = create_engine(
     f"postgresql://{user}:{password}@{host}:{port}/{dbname}",
@@ -87,7 +88,10 @@ class LoginForm(FlaskForm):
 
 @app.route("/challenges/pip-version")
 def challenge_version():
-    return '{"version": "0.1.2"}', 200, {"content-type": "application/json"}
+    session = Session()
+    row = session.query(Settings).filter_by(name="PIP_CHALLENGE_VERSION").first()
+    version = pickle.loads(row.value.encode())
+    return f'{{"version": "{version}"}}', 200, {"content-type": "application/json"}
 
 
 @app.route("/register", methods=["POST", "GET"])
