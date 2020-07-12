@@ -6,3 +6,5 @@ __pycache__
 deployment/secret*
 _meta
 .venv
+beginnerpy/static/.DS_Store
+err.log
