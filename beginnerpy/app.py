@@ -40,6 +40,8 @@ password = os.environ.get("DB_PASSWORD", "dev-env-password-safe-to-be-public")
 engine = create_engine(
     f"postgresql://{user}:{password}@{host}:{port}/{dbname}",
     connect_args={"sslmode": sslmode},
+    pool_recycle=300,
+    max_overflow=0,
 )
 
 Session = sessionmaker(bind=engine)
